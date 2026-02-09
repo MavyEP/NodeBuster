@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://isghyciuf60p"]
+
+[ext_resource type="Script" uid="uid://bylo252p8r1sp" path="res://scripts/UpgradeData.gd" id="1_18b10"]
+
+[resource]
+script = ExtResource("1_18b10")
+upgrade_name = "Eagle Eye"
+description = "+100 Detection Range"
+icon_color = Color(0.6, 0, 1, 1)
+detection_range_bonus = 100.0
+metadata/_custom_type_script = "uid://bylo252p8r1sp"

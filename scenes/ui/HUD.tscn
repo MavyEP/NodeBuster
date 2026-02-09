@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://cswoto822dl8e"]
+
+[ext_resource type="Script" uid="uid://noa6u1lb63mv" path="res://scripts/ui/HUD.gd" id="1_kw0id"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hc4fa"]
+bg_color = Color(0.23921569, 0.23921569, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kw0id"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_atyv1"]
+bg_color = Color(0.23921569, 0.23921569, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ll6g"]
+bg_color = Color(0, 1, 0, 1)
+
+[node name="HUD" type="Control" unique_id=1364205081]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kw0id")
+
+[node name="MainMargin" type="MarginContainer" parent="." unique_id=178409376]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="TopInfo" type="VBoxContainer" parent="MainMargin" unique_id=1904201573]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="StatsRow" type="HBoxContainer" parent="MainMargin/TopInfo" unique_id=972898671]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="MainMargin/TopInfo/StatsRow" unique_id=2134339490]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Level: 1"
+
+[node name="Control" type="Control" parent="MainMargin/TopInfo/StatsRow" unique_id=1675950160]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeLabel" type="Label" parent="MainMargin/TopInfo/StatsRow" unique_id=1781384915]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Time: 0:00"
+
+[node name="KillLabel" type="Label" parent="MainMargin/TopInfo/StatsRow" unique_id=113984750]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Kills: 0"
+
+[node name="HealthContainer" type="VBoxContainer" parent="MainMargin/TopInfo" unique_id=927881409]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HealthLabel" type="Label" parent="MainMargin/TopInfo/HealthContainer" unique_id=1318401104]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Health: 100/100"
+
+[node name="HealthBar" type="ProgressBar" parent="MainMargin/TopInfo/HealthContainer" unique_id=1652554989]
+custom_minimum_size = Vector2(400, 30)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hc4fa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_kw0id")
+value = 100.0
+show_percentage = false
+
+[node name="XPContainer" type="VBoxContainer" parent="MainMargin/TopInfo" unique_id=469847011]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="XPLabel" type="Label" parent="MainMargin/TopInfo/XPContainer" unique_id=2021297794]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "XP: 0/10"
+
+[node name="XPBar" type="ProgressBar" parent="MainMargin/TopInfo/XPContainer" unique_id=1792367167]
+custom_minimum_size = Vector2(400, 25)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_atyv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ll6g")
+show_percentage = false
+
+[node name="BossWarning" type="Label" parent="." unique_id=1327585494]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 48
+text = "⚠️ BOSS INCOMING! ⚠️"
+horizontal_alignment = 1
+vertical_alignment = 1

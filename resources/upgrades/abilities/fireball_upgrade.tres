@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://drft525a7pune"]
+
+[ext_resource type="Script" uid="uid://bylo252p8r1sp" path="res://scripts/UpgradeData.gd" id="1_5honm"]
+
+[resource]
+script = ExtResource("1_5honm")
+upgrade_name = "Fireball +"
+description = "Upgrade Fireball"
+icon_color = Color(1, 0.4, 0, 1)
+upgrade_type = 1
+ability_name = "Fireball"
+max_stacks = 4
+metadata/_custom_type_script = "uid://bylo252p8r1sp"

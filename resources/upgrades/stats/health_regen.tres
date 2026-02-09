@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://cocpsxolgkarh"]
+
+[ext_resource type="Script" uid="uid://bylo252p8r1sp" path="res://scripts/UpgradeData.gd" id="1_nqc6m"]
+
+[resource]
+script = ExtResource("1_nqc6m")
+upgrade_name = "Regeneration"
+description = "+2 Health/second"
+icon_color = Color(0.5647059, 1, 0.5647059, 1)
+health_regen_bonus = 2.0
+metadata/_custom_type_script = "uid://bylo252p8r1sp"

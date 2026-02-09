@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://byy7n6gj5dk7h"]
+
+[ext_resource type="Script" uid="uid://bylo252p8r1sp" path="res://scripts/UpgradeData.gd" id="1_458aa"]
+
+[resource]
+script = ExtResource("1_458aa")
+upgrade_name = "Swift Boots"
+description = "+30 Move Speed"
+icon_color = Color(0, 1, 1, 1)
+move_speed_bonus = 30.0
+max_stacks = 8
+metadata/_custom_type_script = "uid://bylo252p8r1sp"

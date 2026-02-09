@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://degpo1vgk4wby"]
+
+[ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="1_6xk8f"]
+[ext_resource type="Script" uid="uid://6tiw4og7f25p" path="res://scripts/enemies/EnemyAI.gd" id="1_8e3ao"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ykcao"]
+size = Vector2(48, 48)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6xk8f"]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8e3ao"]
+radius = 24.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=661374534]
+collision_layer = 2
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_8e3ao")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1939084238]
+modulate = Color(1, 0, 0, 1)
+texture = SubResource("PlaceholderTexture2D_ykcao")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1831034210]
+shape = SubResource("CircleShape2D_6xk8f")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=974378253]
+script = ExtResource("1_6xk8f")
+max_health = 30.0
+metadata/_custom_type_script = "uid://bwsiwuj7heiqm"
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=286789916]
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1914011355]
+shape = SubResource("CircleShape2D_8e3ao")

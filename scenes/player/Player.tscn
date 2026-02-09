@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bnnjyvf6su204"]
+
+[ext_resource type="Script" uid="uid://di05kl0rv1g4j" path="res://scripts/player/PlayerController.gd" id="1_wr5hl"]
+[ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="2_gfjak"]
+[ext_resource type="Script" uid="uid://x11gnbeuwway" path="res://scripts/abilities/FireballAbility.gd" id="3_4kuee"]
+[ext_resource type="Script" uid="uid://b6iy46ngev5sq" path="res://scripts/components/StatsComponent.gd" id="3_524rm"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_o8nba"]
+size = Vector2(64, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wr5hl"]
+radius = 32.0
+
+[node name="Player" type="CharacterBody2D" unique_id=1015220530]
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_wr5hl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2093878742]
+modulate = Color(0, 1, 1, 1)
+texture = SubResource("PlaceholderTexture2D_o8nba")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=232640168]
+shape = SubResource("CircleShape2D_wr5hl")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1218018552]
+script = ExtResource("2_gfjak")
+metadata/_custom_type_script = "uid://bwsiwuj7heiqm"
+
+[node name="StatsComponent" type="Node" parent="." unique_id=1998021337]
+script = ExtResource("3_524rm")
+metadata/_custom_type_script = "uid://b6iy46ngev5sq"
+
+[node name="AbilityContainer" type="Node" parent="." unique_id=793653026]
+
+[node name="FireballAbility" type="Node" parent="AbilityContainer" unique_id=431625205]
+script = ExtResource("3_4kuee")

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bn31jgw6qk7vx"]
+
+[ext_resource type="Script" uid="uid://r7r3wxgdvwam" path="res://scripts/abilities/Projectile.gd" id="1_ljtwl"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dje8t"]
+size = Vector2(16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ljtwl"]
+radius = 8.0
+
+[node name="Projectile" type="Area2D" unique_id=2117914054]
+collision_mask = 2
+script = ExtResource("1_ljtwl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038244763]
+modulate = Color(1, 0.4, 0, 1)
+texture = SubResource("PlaceholderTexture2D_dje8t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1819616821]
+shape = SubResource("CircleShape2D_ljtwl")
