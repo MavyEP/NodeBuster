@@ -2,24 +2,23 @@
 
 [ext_resource type="Script" uid="uid://di05kl0rv1g4j" path="res://scripts/player/PlayerController.gd" id="1_wr5hl"]
 [ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="2_gfjak"]
+[ext_resource type="Texture2D" uid="uid://cyxiogape6k7u" path="res://assets/testerSprites/blue_body_circle.png" id="2_tpg5x"]
 [ext_resource type="Script" uid="uid://x11gnbeuwway" path="res://scripts/abilities/FireballAbility.gd" id="3_4kuee"]
 [ext_resource type="Script" uid="uid://b6iy46ngev5sq" path="res://scripts/components/StatsComponent.gd" id="3_524rm"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_o8nba"]
-size = Vector2(64, 64)
+[ext_resource type="Texture2D" uid="uid://d17wkdwaenlio" path="res://assets/testerSprites/face_a.png" id="3_c3xxp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wr5hl"]
 radius = 32.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1015220530]
-collision_layer = 1
-collision_mask = 1
 motion_mode = 1
 script = ExtResource("1_wr5hl")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2093878742]
-modulate = Color(0, 1, 1, 1)
-texture = SubResource("PlaceholderTexture2D_o8nba")
+texture = ExtResource("2_tpg5x")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=510759290]
+texture = ExtResource("3_c3xxp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=232640168]
 shape = SubResource("CircleShape2D_wr5hl")
