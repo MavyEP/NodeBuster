@@ -6,32 +6,40 @@
 [ext_resource type="PackedScene" uid="uid://cswoto822dl8e" path="res://scenes/ui/HUD.tscn" id="4_7qcb4"]
 [ext_resource type="PackedScene" uid="uid://dejdmkeu64b8f" path="res://scenes/ui/GameOverScreen.tscn" id="5_lyhax"]
 
-[sub_resource type="TileSet" id="TileSet_lyhax"]
-
-[node name="Game" type="Node2D" unique_id=1248594056]
+[node name="Game" type="Node2D" unique_id=944221195]
 script = ExtResource("1_m44fu")
 
-[node name="GroundTileMap" type="TileMapLayer" parent="." unique_id=270923907]
-tile_set = SubResource("TileSet_lyhax")
+[node name="RoomContainer" type="Node2D" parent="." unique_id=417268744]
 
-[node name="Player" parent="." unique_id=1015220530 instance=ExtResource("1_klkup")]
-position = Vector2(5, 4)
+[node name="Player" parent="." unique_id=74255515 instance=ExtResource("1_klkup")]
+position = Vector2(576, 324)
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=653935904]
-position = Vector2(-5, -4)
+[node name="RoomCamera" type="Camera2D" parent="." unique_id=2059447391]
+position = Vector2(576, 324)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1411279871]
+[node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=1177798606]
 
-[node name="HUD" parent="CanvasLayer" unique_id=1364205081 instance=ExtResource("4_7qcb4")]
+[node name="TransitionRect" type="ColorRect" parent="TransitionLayer" unique_id=1965315402]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1338468372]
+layer = 12
+
+[node name="HUD" parent="CanvasLayer" unique_id=1278156328 instance=ExtResource("4_7qcb4")]
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="LevelUpPanel" parent="CanvasLayer" unique_id=1981914241 instance=ExtResource("3_vrspl")]
+[node name="LevelUpPanel" parent="CanvasLayer" unique_id=1863343534 instance=ExtResource("3_vrspl")]
 z_index = 4096
 offset_top = -1.0
 offset_bottom = -1.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="GameOverScreen" parent="CanvasLayer" unique_id=1334086885 instance=ExtResource("5_lyhax")]
+[node name="GameOverScreen" parent="CanvasLayer" unique_id=206738302 instance=ExtResource("5_lyhax")]
 process_mode = 3

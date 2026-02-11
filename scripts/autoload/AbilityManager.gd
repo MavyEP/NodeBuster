@@ -1,64 +1,80 @@
 extends Node
 
-# Track player's abilities
-var player_abilities: Dictionary = {}  # ability_name: {node: Node, level: int}
-
 func _ready():
-	print("AbilityManager initialized")
+	print("AbilityManager initialized - using dynamic scanning")
 
-func register_ability(ability_node: Node):
-	var ability_name = ability_node.ability_name
-	player_abilities[ability_name] = {
-		"node": ability_node,
-		"level": ability_node.current_level
-	}
-	print("Registered ability: ", ability_name, " at level ", ability_node.current_level)
+func get_all_abilities() -> Array:
+	if not GameManager.player:
+		print("AbilityManager: No player found!")
+		return []
+	
+	var container = GameManager.player.get_node_or_null("AbilityContainer")
+	if not container:
+		print("AbilityManager: No AbilityContainer found on player!")
+		return []
+	
+	var abilities = []
+	for child in container.get_children():
+		if child is BaseAbility:
+			abilities.append(child)
+	
+	return abilities
 
 func has_ability(ability_name: String) -> bool:
-	return player_abilities.has(ability_name)
+	for ability in get_all_abilities():
+		if ability.ability_name == ability_name:
+			return true
+	return false
 
 func get_ability(ability_name: String):
-	if player_abilities.has(ability_name):
-		return player_abilities[ability_name]["node"]
+	for ability in get_all_abilities():
+		if ability.ability_name == ability_name:
+			return ability
 	return null
 
 func level_up_ability(ability_name: String) -> bool:
-	if not has_ability(ability_name):
-		print("Cannot level up ", ability_name, " - player doesn't have it")
-		return false
+	var ability = get_ability(ability_name)
 	
-	var ability = player_abilities[ability_name]["node"]
+	if not ability:
+		print("Cannot level up '", ability_name, "' - not found!")
+		print_abilities()
+		return false
 	
 	if ability.current_level >= ability.max_level:
 		print(ability_name, " is already max level!")
 		return false
 	
 	ability.level_up()
-	player_abilities[ability_name]["level"] = ability.current_level
 	return true
 
 func unlock_ability(ability_script_path: String) -> bool:
 	if not GameManager.player:
 		return false
 	
-	# Load the ability script
 	var ability_script = load(ability_script_path)
 	if not ability_script:
 		print("Failed to load ability script: ", ability_script_path)
 		return false
 	
-	# Create new ability node
 	var ability_node = Node.new()
 	ability_node.set_script(ability_script)
 	
-	# Add to player's AbilityContainer
-	var ability_container = GameManager.player.get_node("AbilityContainer")
+	var ability_container = GameManager.player.get_node_or_null("AbilityContainer")
 	if ability_container:
 		ability_container.add_child(ability_node)
-		print("Unlocked new ability: ", ability_script_path)
+		print("Unlocked ability from: ", ability_script_path)
 		return true
 	
 	return false
 
+func print_abilities():
+	print("=== Abilities in AbilityContainer ===")
+	var abilities = get_all_abilities()
+	if abilities.is_empty():
+		print("  NONE FOUND")
+	for ability in abilities:
+		print("  - '", ability.ability_name, "' Lvl ", ability.current_level, "/", ability.max_level)
+	print("=====================================")
+
 func reset():
-	player_abilities.clear()
+	print("AbilityManager: dynamic scanning active, nothing to reset")

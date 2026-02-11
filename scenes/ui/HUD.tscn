@@ -73,6 +73,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Kills: 0"
 
+[node name="RoomLabel" type="Label" parent="MainMargin/TopInfo/StatsRow"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Room: 0,0"
+
 [node name="HealthContainer" type="VBoxContainer" parent="MainMargin/TopInfo" unique_id=927881409]
 layout_mode = 2
 theme_override_constants/separation = 5

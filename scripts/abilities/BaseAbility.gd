@@ -24,9 +24,6 @@ func _ready():
 	
 	# Initialize the ability
 	initialize()
-	
-	# Register with AbilityManager (ADD THIS LINE)
-	AbilityManager.register_ability(self)
 
 # Override this in child abilities
 func initialize():

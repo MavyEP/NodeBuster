@@ -1,0 +1,235 @@
+extends Node
+
+## Handles room instantiation, transitions, enemy tracking, and door state.
+## Works hand-in-hand with DungeonManager (graph data) to run the game-play
+## side of the dungeon.
+
+signal room_entered(grid_pos: Vector2i)
+signal room_cleared(grid_pos: Vector2i)
+signal doors_locked
+signal doors_unlocked
+signal transition_started
+signal transition_finished
+
+# ---- Constants --------------------------------------------------------------
+const ROOM_WIDTH: int = 1152
+const ROOM_HEIGHT: int = 648
+const DOOR_SCENE_PATH = "res://scenes/rooms/Door.tscn"
+
+# Player spawn offsets from room center when entering from a direction
+const ENTRY_OFFSETS = {
+	"north": Vector2(0, -240),   # came from south of previous room → top area
+	"south": Vector2(0,  240),   # came from north of previous room → bottom
+	"east":  Vector2( 480, 0),   # came from west  → right area
+	"west":  Vector2(-480, 0),   # came from east  → left area
+	"center": Vector2.ZERO,      # start room / default
+}
+
+# ---- State ------------------------------------------------------------------
+var current_grid_pos: Vector2i = Vector2i.ZERO
+var current_room_instance: Node2D = null
+var _active_enemies: Array = []
+var _doors: Dictionary = {}          # direction_string -> DoorController node
+var _is_transitioning: bool = false
+
+# References set by Game.gd during setup
+var room_container: Node2D = null     # parent node for room instances
+var player: CharacterBody2D = null
+var camera: Camera2D = null
+var transition_rect: ColorRect = null # fullscreen overlay for fade
+
+var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
+var _door_scene: PackedScene = null
+
+# ---- Lifecycle --------------------------------------------------------------
+func _ready():
+	_door_scene = load(DOOR_SCENE_PATH)
+
+# ---- Public API -------------------------------------------------------------
+
+## Enter a room. Called at game start and on every door transition.
+func enter_room(grid_pos: Vector2i, entry_direction: String = "center"):
+	var room_info = DungeonManager.get_room_info(grid_pos)
+	if not room_info:
+		push_error("RoomManager: No room at ", grid_pos)
+		return
+
+	# Tear down previous room
+	_cleanup_current_room()
+
+	current_grid_pos = grid_pos
+
+	# Instantiate the room scene
+	var scene: PackedScene = load(room_info.scene_path)
+	current_room_instance = scene.instantiate()
+	room_container.add_child(current_room_instance)
+	current_room_instance.position = Vector2.ZERO
+
+	# Build room visuals (walls + floor) — pass connected directions so
+	# the wall builder knows where to leave gaps for doors.
+	var connections = DungeonManager.get_connected_directions(grid_pos)
+	if current_room_instance.has_method("draw_floor"):
+		current_room_instance.draw_floor()
+	if current_room_instance.has_method("draw_wall_visuals"):
+		current_room_instance.draw_wall_visuals(connections)
+	if current_room_instance.has_method("build_walls"):
+		current_room_instance.build_walls(connections)
+
+	# Place doors
+	_setup_doors(grid_pos)
+
+	# Place player
+	var room_center = Vector2(ROOM_WIDTH / 2.0, ROOM_HEIGHT / 2.0)
+	var offset = ENTRY_OFFSETS.get(entry_direction, Vector2.ZERO)
+	player.global_position = room_center + offset
+
+	# Center camera on room
+	if camera:
+		camera.global_position = room_center
+
+	# Mark visited
+	var first_visit = not room_info.is_visited
+	DungeonManager.mark_visited(grid_pos)
+
+	# Spawn enemies on first visit (skip start room)
+	if first_visit and not room_info.is_start:
+		_lock_doors()
+		_spawn_enemies(room_info)
+	else:
+		_unlock_doors()
+
+	room_entered.emit(grid_pos)
+
+## Called by DoorController when the player steps through a door.
+func transition_to_room(direction: String):
+	if _is_transitioning:
+		return
+	_is_transitioning = true
+	transition_started.emit()
+
+	var target_pos = DungeonManager.get_neighbor_pos(current_grid_pos, direction)
+	if target_pos == Vector2i(-999, -999):
+		_is_transitioning = false
+		return
+
+	var entry_dir = DungeonManager.OPPOSITE[direction]
+
+	# Fade out
+	if transition_rect:
+		var tw = create_tween()
+		tw.tween_property(transition_rect, "color:a", 1.0, 0.15)
+		await tw.finished
+
+	enter_room(target_pos, entry_dir)
+
+	# Fade in
+	if transition_rect:
+		var tw = create_tween()
+		tw.tween_property(transition_rect, "color:a", 0.0, 0.15)
+		await tw.finished
+
+	_is_transitioning = false
+	transition_finished.emit()
+
+func reset():
+	_cleanup_current_room()
+	current_grid_pos = Vector2i.ZERO
+	_is_transitioning = false
+
+# ---- Doors ------------------------------------------------------------------
+func _setup_doors(grid_pos: Vector2i):
+	_doors.clear()
+	var connections = DungeonManager.get_connected_directions(grid_pos)
+	for dir_name in connections:
+		var door_instance = _door_scene.instantiate()
+		door_instance.direction = dir_name
+		door_instance.room_size = Vector2(ROOM_WIDTH, ROOM_HEIGHT)
+		current_room_instance.add_child(door_instance)
+		_doors[dir_name] = door_instance
+		door_instance.player_entered_door.connect(_on_player_entered_door)
+
+func _lock_doors():
+	for door in _doors.values():
+		door.lock()
+	doors_locked.emit()
+
+func _unlock_doors():
+	for door in _doors.values():
+		door.unlock()
+	doors_unlocked.emit()
+
+# ---- Enemies ----------------------------------------------------------------
+func _spawn_enemies(room_info: DungeonManager.RoomInfo):
+	_active_enemies.clear()
+
+	# Gather spawn points from the room template
+	var spawn_points = _get_spawn_points()
+	if spawn_points.is_empty():
+		# Fallback: random positions inside the room
+		spawn_points = _generate_fallback_spawns(3 + room_info.difficulty)
+
+	# Determine enemy count based on difficulty
+	var count = clampi(2 + room_info.difficulty, 2, spawn_points.size())
+
+	# Shuffle and pick
+	spawn_points.shuffle()
+	for i in range(count):
+		var pos: Vector2 = spawn_points[i % spawn_points.size()]
+		_spawn_single_enemy(pos, room_info.difficulty)
+
+func _spawn_single_enemy(pos: Vector2, difficulty: int):
+	var enemy = _enemy_scene.instantiate()
+	enemy.global_position = pos
+
+	# Scale with difficulty
+	var health_mult = 1.0 + difficulty * 0.25
+	var speed_mult  = 1.0 + difficulty * 0.08
+	enemy.move_speed *= speed_mult
+	if enemy.has_node("HealthComponent"):
+		var hc = enemy.get_node("HealthComponent")
+		hc.max_health *= health_mult
+		hc.current_health = hc.max_health
+
+	current_room_instance.add_child(enemy)
+	_active_enemies.append(enemy)
+	enemy.tree_exiting.connect(_on_enemy_died.bind(enemy))
+
+func _on_enemy_died(enemy: Node):
+	_active_enemies.erase(enemy)
+	# Check if room is now clear
+	if _active_enemies.is_empty():
+		DungeonManager.mark_cleared(current_grid_pos)
+		_unlock_doors()
+		room_cleared.emit(current_grid_pos)
+
+func _get_spawn_points() -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	if not current_room_instance:
+		return points
+	var spawn_container = current_room_instance.get_node_or_null("SpawnPoints")
+	if spawn_container:
+		for child in spawn_container.get_children():
+			if child is Marker2D:
+				points.append(child.global_position)
+	return points
+
+func _generate_fallback_spawns(count: int) -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	var margin = 100.0
+	for i in range(count):
+		var x = randf_range(margin, ROOM_WIDTH - margin)
+		var y = randf_range(margin, ROOM_HEIGHT - margin)
+		points.append(Vector2(x, y))
+	return points
+
+# ---- Cleanup ----------------------------------------------------------------
+func _cleanup_current_room():
+	_active_enemies.clear()
+	_doors.clear()
+	if current_room_instance and is_instance_valid(current_room_instance):
+		current_room_instance.queue_free()
+		current_room_instance = null
+
+# ---- Door callback ----------------------------------------------------------
+func _on_player_entered_door(direction: String):
+	transition_to_room(direction)

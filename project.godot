@@ -23,6 +23,8 @@ EnemySpawner="*uid://dpdwkhks7r7b1"
 UpgradeManager="*uid://dnk4sq3c22btr"
 BossManager="*uid://b781bgos5k2pt"
 AbilityManager="*uid://bfvkeb2ujc4c"
+DungeonManager="*res://scripts/dungeon/DungeonManager.gd"
+RoomManager="*res://scripts/dungeon/RoomManager.gd"
 
 [input]
 
