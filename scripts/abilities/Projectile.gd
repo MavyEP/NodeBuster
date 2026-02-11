@@ -7,6 +7,8 @@ extends Area2D
 var direction: Vector2 = Vector2.RIGHT
 var target: Node2D = null
 
+var _has_hit := false
+
 func _ready():
 	
 	add_to_group("projectile")
@@ -38,7 +40,19 @@ func setup(start_pos: Vector2, target_enemy: Node2D, projectile_damage: float):
 		direction = (target.global_position - global_position).normalized()
 
 func _on_body_entered(body):
-	# Hit an enemy
-	if body.is_in_group("enemy") and body.has_method("take_damage"):
-		body.take_damage(damage)
-		queue_free()  # Destroy projectile on hit
+	if _has_hit:
+		return
+	if not (body and body.is_in_group("enemy") and body.has_method("take_damage")):
+		return
+
+	_has_hit = true
+
+	# Disable further collisions instantly (prevents double-hit same frame)
+
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
+
+	body.take_damage(damage)
+	queue_free()
