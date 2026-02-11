@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://x11gnbeuwway" path="res://scripts/abilities/FireballAbility.gd" id="3_4kuee"]
 [ext_resource type="Script" uid="uid://b6iy46ngev5sq" path="res://scripts/components/StatsComponent.gd" id="3_524rm"]
 [ext_resource type="Texture2D" uid="uid://d17wkdwaenlio" path="res://assets/testerSprites/face_a.png" id="3_c3xxp"]
+[ext_resource type="Script" uid="uid://b7rubhn0cjhe0" path="res://scripts/player/AimLaser.gd" id="4_npwbq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wr5hl"]
 radius = 32.0
@@ -23,6 +24,13 @@ texture = ExtResource("3_c3xxp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=232640168]
 shape = SubResource("CircleShape2D_wr5hl")
+
+[node name="AimLaser" type="Node2D" parent="." unique_id=2055658919]
+script = ExtResource("4_npwbq")
+
+[node name="Line2D" type="Line2D" parent="AimLaser" unique_id=2033608032]
+width = 1.0
+default_color = Color(1, 0, 0, 1)
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1218018552]
 script = ExtResource("2_gfjak")

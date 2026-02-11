@@ -5,6 +5,7 @@ extends CharacterBody2D
 @onready var stats_component = $StatsComponent
 
 var is_alive: bool = true
+var is_invulnerable: bool = false
 
 # --- DASH SETTINGS ---
 @export var dash_distance: float = 140.0
@@ -56,6 +57,7 @@ func _physics_process(delta):
 
 		if _dash_time_left <= 0.0:
 			_is_dashing = false
+			is_invulnerable = false
 		return
 
 	# Get input direction
@@ -104,6 +106,7 @@ func _try_dash(input_direction: Vector2) -> void:
 		return # basically blocked / hugging a wall
 
 	_is_dashing = true
+	is_invulnerable = true
 	_dash_time_left = dash_duration
 	_dash_cooldown_left = dash_cooldown
 
@@ -132,7 +135,7 @@ func _get_allowed_dash_distance(dir: Vector2, desired_dist: float) -> float:
 
 
 func take_damage(amount: float):
-	if health_component:
+	if health_component && is_invulnerable==false:
 		health_component.take_damage(amount)
 
 
