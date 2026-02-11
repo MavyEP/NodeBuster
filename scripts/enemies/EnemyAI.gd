@@ -64,4 +64,8 @@ func spawn_xp():
 	var xp_orb = xp_orb_scene.instantiate()
 	xp_orb.global_position = global_position
 	xp_orb.xp_amount = xp_value
-	get_tree().root.add_child(xp_orb)
+	var room = RoomManager.current_room_instance
+	if room and is_instance_valid(room):
+		room.add_child(xp_orb)
+	else:
+		get_tree().root.add_child(xp_orb)

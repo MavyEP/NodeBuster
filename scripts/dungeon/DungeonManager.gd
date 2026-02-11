@@ -44,6 +44,7 @@ class RoomInfo:
 	var is_start: bool = false
 	var difficulty: int = 0
 	var tags: Array[String] = []
+	var saved_entities: Array = []     # persisted dynamic objects (orbs, chests, items…)
 
 # ---- Lifecycle --------------------------------------------------------------
 func _ready():

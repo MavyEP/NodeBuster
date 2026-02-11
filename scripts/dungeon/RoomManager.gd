@@ -98,6 +98,9 @@ func enter_room(grid_pos: Vector2i, entry_direction: String = "center"):
 	else:
 		_unlock_doors()
 
+	# Restore any previously saved entities (orbs, chests, items…)
+	_restore_room_state(room_info)
+
 	room_entered.emit(grid_pos)
 
 ## Called by DoorController when the player steps through a door.
@@ -222,8 +225,83 @@ func _generate_fallback_spawns(count: int) -> Array[Vector2]:
 		points.append(Vector2(x, y))
 	return points
 
+# ---- Room state persistence --------------------------------------------------
+
+## Save every dynamic entity in the current room so it can be restored later.
+func _save_room_state():
+	if not current_room_instance or not is_instance_valid(current_room_instance):
+		return
+	var room_info = DungeonManager.get_room_info(current_grid_pos)
+	if not room_info:
+		return
+
+	room_info.saved_entities.clear()
+
+	# XP orbs
+	for orb in get_tree().get_nodes_in_group("xp_orb"):
+		if not is_instance_valid(orb):
+			continue
+		room_info.saved_entities.append({
+			"type": "xp_orb",
+			"position": orb.global_position,
+			"xp_amount": orb.xp_amount,
+		})
+
+	# Generic ground items (any node in "ground_item" group)
+	for item in get_tree().get_nodes_in_group("ground_item"):
+		if not is_instance_valid(item):
+			continue
+		var data: Dictionary = {
+			"type": "ground_item",
+			"position": item.global_position,
+			"scene_path": item.scene_file_path,
+		}
+		if item.has_method("get_save_data"):
+			data.merge(item.get_save_data())
+		room_info.saved_entities.append(data)
+
+	# Chests (any node in "chest" group)
+	for chest in get_tree().get_nodes_in_group("chest"):
+		if not is_instance_valid(chest):
+			continue
+		var data: Dictionary = {
+			"type": "chest",
+			"position": chest.global_position,
+			"scene_path": chest.scene_file_path,
+		}
+		if chest.has_method("get_save_data"):
+			data.merge(chest.get_save_data())
+		room_info.saved_entities.append(data)
+
+## Recreate entities that were saved when the player previously left this room.
+func _restore_room_state(room_info: DungeonManager.RoomInfo):
+	if room_info.saved_entities.is_empty():
+		return
+
+	var xp_orb_scene = preload("res://scenes/game/XPOrb.tscn")
+
+	for entity_data in room_info.saved_entities:
+		match entity_data.type:
+			"xp_orb":
+				var orb = xp_orb_scene.instantiate()
+				orb.global_position = entity_data.position
+				orb.xp_amount = entity_data.xp_amount
+				current_room_instance.add_child(orb)
+			"ground_item", "chest":
+				if entity_data.has("scene_path") and entity_data.scene_path != "":
+					var scene = load(entity_data.scene_path)
+					if scene:
+						var node = scene.instantiate()
+						node.global_position = entity_data.position
+						if node.has_method("apply_save_data"):
+							node.apply_save_data(entity_data)
+						current_room_instance.add_child(node)
+
+	room_info.saved_entities.clear()
+
 # ---- Cleanup ----------------------------------------------------------------
 func _cleanup_current_room():
+	_save_room_state()
 	_active_enemies.clear()
 	_doors.clear()
 	if current_room_instance and is_instance_valid(current_room_instance):

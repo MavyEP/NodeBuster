@@ -66,13 +66,17 @@ func _on_died():
 func spawn_xp():
 	var xp_orb_scene = preload("res://scenes/game/XPOrb.tscn")
 	var xp_orb = xp_orb_scene.instantiate()
-	
+
 	# Scatter XP in random directions
 	var random_offset = Vector2(randf_range(-50, 50), randf_range(-50, 50))
 	xp_orb.global_position = global_position + random_offset
 	xp_orb.xp_amount = xp_value / 10
-	
-	get_tree().root.add_child(xp_orb)
+
+	var room = RoomManager.current_room_instance
+	if room and is_instance_valid(room):
+		room.add_child(xp_orb)
+	else:
+		get_tree().root.add_child(xp_orb)
 
 func spawn_legendary_reward():
 	# For now, just give a powerful upgrade automatically
