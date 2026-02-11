@@ -9,6 +9,8 @@ extends CharacterBody2D
 @onready var health_component = $HealthComponent
 @onready var hitbox = $Hitbox
 
+@export var turn_speed: float = 12.0 # bigger = faster turning
+
 var player = null
 var is_alive: bool = true
 
@@ -33,9 +35,7 @@ func _physics_process(delta):
 	# Chase the player
 	var direction = (player.global_position - global_position).normalized()
 	velocity = direction * move_speed
-	
-	# Face the player
-	rotation = direction.angle()
+
 	
 	# Move
 	move_and_slide()

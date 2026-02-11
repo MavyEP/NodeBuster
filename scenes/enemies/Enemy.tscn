@@ -12,6 +12,7 @@ radius = 24.0
 radius = 24.0
 
 [node name="Enemy" type="CharacterBody2D" unique_id=661374534]
+z_index = 5
 collision_layer = 2
 collision_mask = 0
 motion_mode = 1

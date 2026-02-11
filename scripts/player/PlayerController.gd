@@ -40,9 +40,6 @@ func _physics_process(delta):
 	# Move the player
 	move_and_slide()
 
-	# Rotate player to face movement direction
-	if input_direction.length() > 0:
-		rotation = input_direction.angle()
 
 func _process(delta):
 	if not is_alive or not health_component or not stats_component:

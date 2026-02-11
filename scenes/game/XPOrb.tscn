@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://of40kyvfx8es"]
 
 [ext_resource type="Script" uid="uid://cpnbqlbemen5f" path="res://scripts/XPOrb.gd" id="1_guaam"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_47bd6"]
-size = Vector2(16, 16)
+[ext_resource type="Texture2D" uid="uid://csotf53x53w1j" path="res://assets/testerSprites/tile_coin.png" id="2_vp1r2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_47bd6"]
 radius = 8.0
@@ -12,8 +10,7 @@ radius = 8.0
 script = ExtResource("1_guaam")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1713991853]
-modulate = Color(0, 0.81805116, 4.235506e-06, 1)
-texture = SubResource("PlaceholderTexture2D_47bd6")
+texture = ExtResource("2_vp1r2")
 
 [node name="CollectionArea" type="Area2D" parent="." unique_id=1049662899]
 collision_layer = 2
