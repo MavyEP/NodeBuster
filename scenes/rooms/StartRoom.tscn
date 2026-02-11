@@ -1,10 +1,8 @@
-[gd_scene format=3 uid="uid://d2startroom001"]
+[gd_scene format=3 uid="uid://cadkbygd1x40s"]
 
-[ext_resource type="Script" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Script" uid="uid://cnd2tka4o7u4n" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
 
-[node name="StartRoom" type="Node2D"]
+[node name="StartRoom" type="Node2D" unique_id=536740753]
 script = ExtResource("1_tmpl")
-difficulty = 0
-tags = PackedStringArray("start")
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=417682784]

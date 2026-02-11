@@ -26,9 +26,8 @@ func start_game():
 	ExperienceManager.reset()
 	BossManager.reset()
 	UpgradeManager.reset()
-	AbilityManager.reset()
-	DungeonManager.reset()
-	RoomManager.reset()
+	#DungeonManager.reset()
+	#RoomManager.reset()
 
 	# Unpause
 	get_tree().paused = false
