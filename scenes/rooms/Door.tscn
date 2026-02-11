@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d2doorprefab01"]
+
+[ext_resource type="Script" path="res://scripts/dungeon/DoorController.gd" id="1_door"]
+
+[node name="Door" type="Node2D"]
+script = ExtResource("1_door")

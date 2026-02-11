@@ -34,6 +34,15 @@ func update_stats():
 	kills_label.text = "Enemies Killed: " + str(GameManager.enemies_killed)
 	bosses_label.text = "Bosses Defeated: " + str(BossManager.bosses_spawned)
 
+	# Count explored rooms
+	var explored = 0
+	var total = DungeonManager.dungeon_map.size()
+	for pos in DungeonManager.dungeon_map:
+		var info = DungeonManager.dungeon_map[pos]
+		if info.is_visited:
+			explored += 1
+	kills_label.text = "Enemies Killed: %d  |  Rooms: %d/%d" % [GameManager.enemies_killed, explored, total]
+
 func _on_restart_pressed():
 	print("Restarting game...")
 	

@@ -12,19 +12,25 @@ extends Control
 @onready var xp_label = $MainMargin/TopInfo/XPContainer/XPLabel
 @onready var xp_bar = $MainMargin/TopInfo/XPContainer/XPBar
 
+@onready var room_label = $MainMargin/TopInfo/StatsRow/RoomLabel
+
 func _ready():
-	
 	# Connect to player health - use deferred to ensure player is ready
 	call_deferred("connect_to_player")
-	
+
 	# Hide boss warning initially
 	if boss_warning:
 		boss_warning.hide()
-	
+
 	# Connect to experience system
 	ExperienceManager.experience_gained.connect(_on_xp_gained)
 	ExperienceManager.level_up.connect(_on_level_up)
-	
+
+	# Connect to room events
+	RoomManager.room_entered.connect(_on_room_entered)
+	RoomManager.doors_locked.connect(_on_doors_locked)
+	RoomManager.doors_unlocked.connect(_on_doors_unlocked)
+
 	# Initial update
 	update_xp()
 	update_level()
@@ -63,10 +69,30 @@ func _on_level_up(new_level):
 	update_level()
 	update_xp()
 
+func _on_room_entered(grid_pos: Vector2i):
+	if room_label:
+		var info = DungeonManager.get_room_info(grid_pos)
+		var status = ""
+		if info and info.is_cleared:
+			status = " [CLEAR]"
+		elif info and info.is_start:
+			status = " [START]"
+		room_label.text = "Room: %d,%d%s" % [grid_pos.x, grid_pos.y, status]
+
+func _on_doors_locked():
+	if room_label:
+		room_label.modulate = Color(1.0, 0.4, 0.4)
+
+func _on_doors_unlocked():
+	if room_label:
+		room_label.modulate = Color(1.0, 1.0, 1.0)
+		# Update cleared status
+		_on_room_entered(RoomManager.current_grid_pos)
+
 func check_boss_warning():
 	# Show warning 10 seconds before boss spawn
 	var time_to_next_boss = BossManager.next_boss_time - GameManager.current_time
-	
+
 	if time_to_next_boss <= 10.0 and time_to_next_boss > 9.0:
 		# Only show once (when it crosses 10 seconds)
 		if boss_warning and not boss_warning.visible:
@@ -76,15 +102,15 @@ func check_boss_warning():
 func show_boss_warning():
 	if not boss_warning:
 		return
-	
+
 	boss_warning.show()
-	
+
 	# Flash the warning
 	var tween = create_tween()
 	tween.set_loops(6)
 	tween.tween_property(boss_warning, "modulate:a", 0.0, 0.25)
 	tween.tween_property(boss_warning, "modulate:a", 1.0, 0.25)
-	
+
 	# Hide after 3 seconds
 	await get_tree().create_timer(3.0).timeout
 	boss_warning.hide()
