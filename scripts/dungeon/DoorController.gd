@@ -104,6 +104,7 @@ func _build_visual():
 		_sprite = Sprite2D.new()
 		_sprite.name = "DoorSprite"
 		_sprite.z_index = -4
+		
 		# Rotate east/west doors so the sprite faces the right way
 		if direction in ["east", "west"]:
 			_sprite.rotation_degrees = 90.0

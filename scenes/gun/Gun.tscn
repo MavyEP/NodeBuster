@@ -11,4 +11,8 @@ rotation = 1.5707964
 texture = ExtResource("2_kk1qa")
 
 [node name="Nozzle" type="Marker2D" parent="." unique_id=251953139]
-position = Vector2(13, 0)
+position = Vector2(6, 0)
+
+[node name="Weapon_Cooldown" type="Timer" parent="." unique_id=1483850548]
+
+[connection signal="timeout" from="Weapon_Cooldown" to="." method="_on_weapon_cooldown_timeout"]

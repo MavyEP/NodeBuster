@@ -33,6 +33,6 @@ metadata/_custom_type_script = "uid://b6iy46ngev5sq"
 [node name="PrimaryWeapon" type="Node2D" parent="." unique_id=1479394763]
 
 [node name="Gun" parent="PrimaryWeapon" unique_id=1707308515 instance=ExtResource("5_tpg5x")]
-position = Vector2(13, 0)
+position = Vector2(16, 0)
 
 [node name="PrimaryWeaponPivot" type="Marker2D" parent="." unique_id=800046864]

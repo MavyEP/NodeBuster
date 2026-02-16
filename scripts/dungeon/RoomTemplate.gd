@@ -23,10 +23,10 @@ class_name RoomTemplate
 @export var room_height: int = 270
 
 ## Wall thickness used when the room builds its own collision walls.
-@export var wall_thickness: float = 32.0
+@export var wall_thickness: float = 16.0
 
 ## Door gap size (opening in the wall where doors are placed).
-@export var door_gap: float = 32.0
+@export var door_gap: float = 16.0
 
 # ---- Texture exports --------------------------------------------------------
 # Set these in the inspector to replace the placeholder ColorRects with real art.

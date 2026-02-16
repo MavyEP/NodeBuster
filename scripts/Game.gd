@@ -41,8 +41,11 @@ func _on_dungeon_generation_complete():
 
 	# Show the player
 	player.visible = true
+	# TO BE MODIFIED!!!!! REMOVE THIS TIMER 
+	await get_tree().create_timer(2.0).timeout
 	
-	await get_tree().create_timer(2.3).timeout
+	
+	
 	# Fade from black to reveal the game
 	if transition_rect:
 		var tw = create_tween()
