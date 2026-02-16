@@ -15,7 +15,7 @@ signal player_entered_door(direction: String)
 ## Which wall this door sits on — set by RoomManager when instantiating.
 var direction: String = "north"
 ## Room size — used to auto-position the door.  Set before adding to tree.
-var room_size: Vector2 = Vector2(1152, 648)
+var room_size: Vector2 = Vector2(480, 270)
 
 var is_locked: bool = false
 
@@ -33,8 +33,8 @@ var _visual: ColorRect      # fallback when no textures
 var _sprite: Sprite2D        # used when textures are assignedt
 
 # Door dimensions
-const DOOR_WIDTH: float = 32.0
-const DOOR_DEPTH: float = 32.0
+const DOOR_WIDTH: float = 16.0
+const DOOR_DEPTH: float = 16.0
 
 func _ready():
 	_position_self()
@@ -105,9 +105,17 @@ func _build_visual():
 		_sprite.name = "DoorSprite"
 		_sprite.z_index = -4
 		
-		# Rotate east/west doors so the sprite faces the right way
-		if direction in ["east", "west"]:
-			_sprite.rotation_degrees = 90.0
+		match direction:
+			"north":
+				_sprite.position.y += 8  # Anchor to edge, no offset
+			"east":
+				_sprite.position.x = -8
+				_sprite.rotation_degrees = 90.0
+			"west":
+				_sprite.position.x = +8
+				_sprite.rotation_degrees = -90.0
+			"south":
+				_sprite.position.y -= 8
 		add_child(_sprite)
 	else:
 		# ColorRect fallback (original behavior)
