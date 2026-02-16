@@ -4,6 +4,12 @@ class_name DoorController
 ## A single door placed at the edge of a room.
 ## Emits `player_entered_door` when the player walks into it while unlocked.
 
+##
+## Texture workflow:
+##   Set locked_texture / unlocked_texture in the inspector (or from code)
+##   to replace the placeholder colored rectangles with real sprites.
+##   The door will tween-animate between them on lock/unlock.
+
 signal player_entered_door(direction: String)
 
 ## Which wall this door sits on — set by RoomManager when instantiating.
@@ -13,14 +19,22 @@ var room_size: Vector2 = Vector2(1152, 648)
 
 var is_locked: bool = false
 
+# ---- Texture exports --------------------------------------------------------
+## Sprite shown when the door is locked (e.g. iron bars / closed gate).
+var locked_texture: Texture2D = null
+## Sprite shown when the door is unlocked (e.g. open doorway).
+var unlocked_texture: Texture2D = null
+
+
 # Child references (created in _ready)
 var _area: Area2D
 var _blocker: StaticBody2D
-var _visual: ColorRect
+var _visual: ColorRect      # fallback when no textures
+var _sprite: Sprite2D        # used when textures are assignedt
 
 # Door dimensions
-const DOOR_WIDTH: float = 96.0
-const DOOR_DEPTH: float = 32.0
+const DOOR_WIDTH: float = 48.0
+const DOOR_DEPTH: float = 48.0
 
 func _ready():
 	_position_self()
@@ -83,38 +97,66 @@ func _build_blocker():
 	_blocker.add_child(col)
 
 func _build_visual():
-	_visual = ColorRect.new()
-	_visual.name = "DoorVisual"
-	_visual.z_index = -4
+	var use_sprites = locked_texture != null or unlocked_texture != null
 
-	match direction:
-		"north", "south":
-			_visual.size = Vector2(DOOR_WIDTH, DOOR_DEPTH)
-			_visual.position = Vector2(-DOOR_WIDTH / 2.0, -DOOR_DEPTH / 2.0)
-		"east", "west":
-			_visual.size = Vector2(DOOR_DEPTH, DOOR_WIDTH)
-			_visual.position = Vector2(-DOOR_DEPTH / 2.0, -DOOR_WIDTH / 2.0)
+	if use_sprites:
+		# Sprite-based door
+		_sprite = Sprite2D.new()
+		_sprite.name = "DoorSprite"
+		_sprite.z_index = -4
+		# Rotate east/west doors so the sprite faces the right way
+		if direction in ["east", "west"]:
+			_sprite.rotation_degrees = 90.0
+		add_child(_sprite)
+	else:
+		# ColorRect fallback (original behavior)
+		_visual = ColorRect.new()
+		_visual.name = "DoorVisual"
+		_visual.z_index = -4
 
-	add_child(_visual)
+		match direction:
+			"north", "south":
+				_visual.size = Vector2(DOOR_WIDTH, DOOR_DEPTH)
+				_visual.position = Vector2(-DOOR_WIDTH / 2.0, -DOOR_DEPTH / 2.0)
+			"east", "west":
+				_visual.size = Vector2(DOOR_DEPTH, DOOR_WIDTH)
+				_visual.position = Vector2(-DOOR_DEPTH / 2.0, -DOOR_WIDTH / 2.0)
+
+		add_child(_visual)
 
 # ---- Lock / Unlock ----------------------------------------------------------
 func lock():
 	is_locked = true
 	_blocker.collision_layer = 1
-	# Show blocker visual
 	for col_child in _blocker.get_children():
 		if col_child is CollisionShape2D:
 			col_child.disabled = false
-	_visual.color = Color(0.6, 0.15, 0.15, 1.0)   # red = locked
+	if _sprite:
+		_sprite.texture = locked_texture if locked_texture else unlocked_texture
+		_play_door_tween()
+	elif _visual:
+		_visual.color = Color(0.6, 0.15, 0.15, 1.0)   # red = locked
 
 func unlock():
 	is_locked = false
-	# Disable blocker collision
 	for col_child in _blocker.get_children():
 		if col_child is CollisionShape2D:
 			col_child.disabled = true
-	_visual.color = Color(0.2, 0.7, 0.3, 1.0)   # green = open
+	if _sprite:
+		_sprite.texture = unlocked_texture if unlocked_texture else locked_texture
+		_play_door_tween()
+	elif _visual:
+		_visual.color = Color(0.2, 0.7, 0.3, 1.0)   # green = open
 
+## Quick scale-bounce animation when the door state changes.
+## Looks like the door slamming shut or swinging open.
+func _play_door_tween():
+	if not _sprite or not is_inside_tree():
+		return
+	var tw = create_tween()
+	tw.tween_property(_sprite, "scale", Vector2(1.15, 0.7), 0.06)
+	tw.tween_property(_sprite, "scale", Vector2(1.0, 1.0), 0.1)
+	
 # ---- Detection --------------------------------------------------------------
 func _on_body_entered(body: Node2D):
 	if is_locked:

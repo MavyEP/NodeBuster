@@ -48,7 +48,7 @@ func _on_body_entered(body):
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	
-	if  (body and body.is_in_group("enemy") and body.has_method("take_damage")):
+	if  (body and (body.is_in_group("enemy") or body.is_in_group("boss")) and body.has_method("take_damage")):
 		body.take_damage(damage)
 	elif (body and body.is_in_group("player")):
 		return

@@ -1,25 +1,28 @@
-[gd_scene format=3 uid="uid://d2combatroom01"]
+[gd_scene format=3 uid="uid://br7vtfig10q0s"]
 
-[ext_resource type="Script" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Script" uid="uid://cnd2tka4o7u4n" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Texture2D" uid="uid://c2u2u7afn7vb5" path="res://assets/prototypeKennyAssets/Tiles/tile_0000.png" id="2_x0w4l"]
+[ext_resource type="Texture2D" uid="uid://wy7ebds0fbp8" path="res://assets/prototypeKennyAssets/Tiles/tile_0014.png" id="3_kim2h"]
 
-[node name="CombatRoom1" type="Node2D"]
+[node name="CombatRoom1" type="Node2D" unique_id=1443284043]
 script = ExtResource("1_tmpl")
 difficulty = 1
-tags = PackedStringArray("combat")
+floor_texture = ExtResource("2_x0w4l")
+wall_texture = ExtResource("3_kim2h")
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=1769278562]
 
-[node name="Spawn1" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=257698842]
 position = Vector2(300, 200)
 
-[node name="Spawn2" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=364118667]
 position = Vector2(850, 200)
 
-[node name="Spawn3" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=929098]
 position = Vector2(300, 450)
 
-[node name="Spawn4" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=912443806]
 position = Vector2(850, 450)
 
-[node name="Spawn5" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn5" type="Marker2D" parent="SpawnPoints" unique_id=230065125]
 position = Vector2(576, 324)

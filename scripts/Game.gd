@@ -10,7 +10,9 @@ extends Node2D
 func _ready():
 	# Small delay so all autoloads are initialised
 	await get_tree().create_timer(0.3).timeout
-
+	
+	#RoomManager.door_locked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0045.png")
+	#RoomManager.door_unlocked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0021.png")
 	# Hand references to RoomManager
 	RoomManager.room_container = room_container
 	RoomManager.player = player

@@ -1,31 +1,34 @@
-[gd_scene format=3 uid="uid://d2combatroom02"]
+[gd_scene format=3 uid="uid://br7vtfig10q0t"]
 
-[ext_resource type="Script" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Script" uid="uid://cnd2tka4o7u4n" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Texture2D" uid="uid://c2u2u7afn7vb5" path="res://assets/prototypeKennyAssets/Tiles/tile_0000.png" id="2_urtmp"]
+[ext_resource type="Texture2D" uid="uid://wy7ebds0fbp8" path="res://assets/prototypeKennyAssets/Tiles/tile_0014.png" id="3_s8klb"]
 
-[node name="CombatRoom2" type="Node2D"]
+[node name="CombatRoom2" type="Node2D" unique_id=28023525]
 script = ExtResource("1_tmpl")
 difficulty = 1
-tags = PackedStringArray("combat")
+floor_texture = ExtResource("2_urtmp")
+wall_texture = ExtResource("3_s8klb")
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=435987204]
 
-[node name="Spawn1" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=1245571999]
 position = Vector2(200, 150)
 
-[node name="Spawn2" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=1057219152]
 position = Vector2(950, 150)
 
-[node name="Spawn3" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=759227183]
 position = Vector2(576, 324)
 
-[node name="Spawn4" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=1442181967]
 position = Vector2(200, 500)
 
-[node name="Spawn5" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn5" type="Marker2D" parent="SpawnPoints" unique_id=6214218]
 position = Vector2(950, 500)
 
-[node name="Spawn6" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn6" type="Marker2D" parent="SpawnPoints" unique_id=90204408]
 position = Vector2(400, 324)
 
-[node name="Spawn7" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn7" type="Marker2D" parent="SpawnPoints" unique_id=598724669]
 position = Vector2(750, 324)

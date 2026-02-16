@@ -23,19 +23,33 @@ class_name RoomTemplate
 @export var room_height: int = 648
 
 ## Wall thickness used when the room builds its own collision walls.
-@export var wall_thickness: float = 32.0
+@export var wall_thickness: float = 48.0
 
 ## Door gap size (opening in the wall where doors are placed).
-@export var door_gap: float = 96.0
+@export var door_gap: float = 48.0
 
-# ---- Runtime helpers --------------------------------------------------------
+# ---- Texture exports --------------------------------------------------------
+# Set these in the inspector to replace the placeholder ColorRects with real art.
+# Leave null to keep the colored-rectangle fallback.
 
-## Build simple rectangular collision walls with gaps for doors.
-## Called by the room scene's _ready() — keeps wall creation out of .tscn hand-editing.
+@export_group("Room Textures")
+
+## Floor texture — tiled across the entire room interior.
+## Use a small seamless tile (e.g. 64x64 or 128x128 stone/dirt texture).
+@export var floor_texture: Texture2D = null
+
+## Wall texture — tiled along each wall segment.
+@export var wall_texture: Texture2D = null
+
+## Fallback colours used when no texture is assigned.
+@export var floor_color: Color = Color(0.15, 0.15, 0.2)
+@export var wall_color: Color = Color(0.35, 0.3, 0.25)
+
+
 func build_walls(connected_directions: Array = []) -> StaticBody2D:
 	var walls = StaticBody2D.new()
 	walls.name = "Walls"
-	walls.collision_layer = 1   # player collides with layer 1
+	walls.collision_layer = 1  
 	add_child(walls)
 
 	var w = float(room_width)
@@ -43,22 +57,19 @@ func build_walls(connected_directions: Array = []) -> StaticBody2D:
 	var t = wall_thickness
 	var gap = door_gap
 
-	# Each wall is split into two segments with a gap in the middle for doors.
-	# If no door exists in that direction the gap is filled.
 
-	# --- North wall (top) ---
 	_add_wall_pair(walls, "north" in connected_directions,
 		Vector2(0, 0), Vector2(w, t), gap, true)
 
-	# --- South wall (bottom) ---
+
 	_add_wall_pair(walls, "south" in connected_directions,
 		Vector2(0, h - t), Vector2(w, h), gap, true)
 
-	# --- West wall (left) ---
+
 	_add_wall_pair(walls, "west" in connected_directions,
 		Vector2(0, 0), Vector2(t, h), gap, false)
 
-	# --- East wall (right) ---
+
 	_add_wall_pair(walls, "east" in connected_directions,
 		Vector2(w - t, 0), Vector2(w, h), gap, false)
 
@@ -105,20 +116,39 @@ func _add_rect_collision(parent: Node, pos: Vector2, size: Vector2):
 	col.position = pos + size / 2.0
 	parent.add_child(col)
 
-## Draw a simple coloured floor quad (placeholder art).
-func draw_floor(color: Color = Color(0.15, 0.15, 0.2)):
-	var rect = ColorRect.new()
-	rect.name = "Floor"
-	rect.color = color
-	rect.position = Vector2.ZERO
-	rect.size = Vector2(room_width, room_height)
-	rect.z_index = -10
-	add_child(rect)
-	move_child(rect, 0)   # draw behind everything
+## Draw the room floor. Uses floor_texture if set, otherwise a solid ColorRect.
+func draw_floor(color: Color = Color(-1, -1, -1)):
+	# Allow callers to pass a color override, but default to the export value
+	if color == Color(-1, -1, -1):
+		color = floor_color
 
-## Draw wall visuals (simple ColorRects matching the collision walls).
+	if floor_texture:
+		var tex_rect = TextureRect.new()
+		tex_rect.name = "Floor"
+		tex_rect.texture = floor_texture
+		tex_rect.position = Vector2.ZERO
+		tex_rect.size = Vector2(room_width, room_height)
+		tex_rect.stretch_mode = TextureRect.STRETCH_TILE
+		tex_rect.z_index = -10
+		add_child(tex_rect)
+		move_child(tex_rect, 0)
+	else:
+		var rect = ColorRect.new()
+		rect.name = "Floor"
+		rect.color = color
+		rect.position = Vector2.ZERO
+		rect.size = Vector2(room_width, room_height)
+		rect.z_index = -10
+		add_child(rect)
+		move_child(rect, 0)
+
+## Draw wall visuals matching the collision walls.
+## Uses wall_texture if set, otherwise solid ColorRects.
 func draw_wall_visuals(connected_directions: Array = [],
-		wall_color: Color = Color(0.35, 0.3, 0.25)):
+		color_override: Color = Color(-1, -1, -1)):
+			
+	if color_override == Color(-1, -1, -1):
+		color_override = wall_color
 	var w = float(room_width)
 	var h = float(room_height)
 	var t = wall_thickness
@@ -126,46 +156,56 @@ func draw_wall_visuals(connected_directions: Array = [],
 
 	# North
 	_draw_wall_visual_pair("north" in connected_directions,
-		Vector2(0, 0), Vector2(w, t), gap, true, wall_color)
+		Vector2(0, 0), Vector2(w, t), gap, true, color_override)
 	# South
 	_draw_wall_visual_pair("south" in connected_directions,
-		Vector2(0, h - t), Vector2(w, h), gap, true, wall_color)
+		Vector2(0, h - t), Vector2(w, h), gap, true, color_override)
 	# West
 	_draw_wall_visual_pair("west" in connected_directions,
-		Vector2(0, 0), Vector2(t, h), gap, false, wall_color)
+		Vector2(0, 0), Vector2(t, h), gap, false, color_override)
 	# East
 	_draw_wall_visual_pair("east" in connected_directions,
-		Vector2(w - t, 0), Vector2(w, h), gap, false, wall_color)
+		Vector2(w - t, 0), Vector2(w, h), gap, false, color_override)
 
 func _draw_wall_visual_pair(has_door: bool, top_left: Vector2,
 		bottom_right: Vector2, gap: float, is_horizontal: bool,
 		color: Color):
 	var size = bottom_right - top_left
 	if not has_door:
-		_add_color_rect(top_left, size, color)
+		_add_visual_rect(top_left, size, color)
 		return
 
 	if is_horizontal:
 		var mid = top_left.x + size.x / 2.0
 		var half_gap = gap / 2.0
-		_add_color_rect(top_left,
+		_add_visual_rect(top_left,
 			Vector2(mid - half_gap - top_left.x, size.y), color)
-		_add_color_rect(Vector2(mid + half_gap, top_left.y),
+		_add_visual_rect(Vector2(mid + half_gap, top_left.y),
 			Vector2(bottom_right.x - mid - half_gap, size.y), color)
 	else:
 		var mid = top_left.y + size.y / 2.0
 		var half_gap = gap / 2.0
-		_add_color_rect(top_left,
+		_add_visual_rect(top_left,
 			Vector2(size.x, mid - half_gap - top_left.y), color)
-		_add_color_rect(Vector2(top_left.x, mid + half_gap),
+		_add_visual_rect(Vector2(top_left.x, mid + half_gap),
 			Vector2(size.x, bottom_right.y - mid - half_gap), color)
 
-func _add_color_rect(pos: Vector2, size: Vector2, color: Color):
+## Creates either a TextureRect (tiled) or a ColorRect for a wall segment.
+func _add_visual_rect(pos: Vector2, size: Vector2, color: Color):
 	if size.x <= 0 or size.y <= 0:
 		return
-	var rect = ColorRect.new()
-	rect.color = color
-	rect.position = pos
-	rect.size = size
-	rect.z_index = -5
-	add_child(rect)
+	if wall_texture:
+		var tex_rect = TextureRect.new()
+		tex_rect.texture = wall_texture
+		tex_rect.position = pos
+		tex_rect.size = size
+		tex_rect.stretch_mode = TextureRect.STRETCH_TILE
+		tex_rect.z_index = -5
+		add_child(tex_rect)
+	else:
+		var rect = ColorRect.new()
+		rect.color = color
+		rect.position = pos
+		rect.size = size
+		rect.z_index = -5
+		add_child(rect)

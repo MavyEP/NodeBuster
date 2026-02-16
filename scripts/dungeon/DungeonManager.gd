@@ -7,7 +7,7 @@ extends Node
 signal dungeon_generated
 
 # --- Tunables ---------------------------------------------------------------
-@export var dungeon_size: int = 12          # base room count for level 1
+@export var dungeon_size: int = 3          # base room count for level 1
 @export var max_generation_attempts: int = 200
 @export var size_growth_per_level: int = 3  # extra rooms added per dungeon level
 @export var boss_room_scene_path: String = "res://scenes/rooms/BossRoom.tscn"

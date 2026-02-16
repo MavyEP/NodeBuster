@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://di05kl0rv1g4j" path="res://scripts/player/PlayerController.gd" id="1_wr5hl"]
 [ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="2_gfjak"]
-[ext_resource type="Texture2D" uid="uid://cyxiogape6k7u" path="res://assets/testerSprites/blue_body_circle.png" id="2_tpg5x"]
+[ext_resource type="Texture2D" uid="uid://byuxjexkkeviy" path="res://assets/prototypeKennyAssets/Tiles/tile_0096.png" id="2_tpg5x"]
 [ext_resource type="Script" uid="uid://b6iy46ngev5sq" path="res://scripts/components/StatsComponent.gd" id="3_524rm"]
 [ext_resource type="PackedScene" uid="uid://dn3cwp8rst0tf" path="res://scenes/gun/Gun.tscn" id="5_tpg5x"]
 
@@ -15,6 +15,7 @@ motion_mode = 1
 script = ExtResource("1_wr5hl")
 
 [node name="Body" type="Sprite2D" parent="." unique_id=2093878742]
+scale = Vector2(2, 2)
 texture = ExtResource("2_tpg5x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=232640168]

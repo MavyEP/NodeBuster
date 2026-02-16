@@ -75,7 +75,7 @@ func _physics_process(delta):
 	primary_weapon.global_position = primary_weapon_pivot.global_position + mouse_direction * gun_hold_distance
 	primary_weapon.scale.y = 1 if mouse_direction.x > 0 else -1
 	#Show weapon behind player
-	#primary_weapon.show_behind_parent = mouse_direction.y < 0 
+	primary_weapon.show_behind_parent = mouse_direction.y < 0 
 	
 	primary_weapon.look_at(get_global_mouse_position())
 	

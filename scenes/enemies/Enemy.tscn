@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="1_6xk8f"]
 [ext_resource type="Script" uid="uid://6tiw4og7f25p" path="res://scripts/enemies/EnemyAI.gd" id="1_8e3ao"]
-[ext_resource type="Texture2D" uid="uid://b3jd41dm0s5fq" path="res://assets/testerSprites/red_body_rhombus.png" id="2_73enu"]
-[ext_resource type="Texture2D" uid="uid://bwkd6bbldeq2f" path="res://assets/testerSprites/face_g.png" id="3_7iym1"]
+[ext_resource type="Texture2D" uid="uid://cya1jrnsmylrn" path="res://assets/prototypeKennyAssets/Tiles/tile_0123.png" id="2_8axbs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6xk8f"]
 radius = 24.0
@@ -19,10 +18,8 @@ motion_mode = 1
 script = ExtResource("1_8e3ao")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1939084238]
-texture = ExtResource("2_73enu")
-
-[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1062320523]
-texture = ExtResource("3_7iym1")
+scale = Vector2(2, 2)
+texture = ExtResource("2_8axbs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1831034210]
 shape = SubResource("CircleShape2D_6xk8f")

@@ -16,6 +16,7 @@ position = Vector2(576, 324)
 
 [node name="RoomCamera" type="Camera2D" parent="." unique_id=2059447391]
 position = Vector2(576, 324)
+position_smoothing_enabled = true
 
 [node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=1177798606]
 

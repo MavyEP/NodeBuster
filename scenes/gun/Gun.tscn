@@ -1,14 +1,15 @@
 [gd_scene format=3 uid="uid://dn3cwp8rst0tf"]
 
-[ext_resource type="Texture2D" uid="uid://rvss4n53mlum" path="res://assets/testerSprites/blue_hand_point.png" id="1_0niuh"]
 [ext_resource type="Script" uid="uid://bcandwydvxfjl" path="res://scripts/gun/Gun.gd" id="1_kk1qa"]
+[ext_resource type="Texture2D" uid="uid://41cmtbyg8i5q" path="res://assets/prototypeKennyAssets/Tiles/tile_0103.png" id="2_kk1qa"]
 
 [node name="Gun" type="Node2D" unique_id=1707308515]
 script = ExtResource("1_kk1qa")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=204892951]
-rotation = 0.6632251
-texture = ExtResource("1_0niuh")
+rotation = 1.5707964
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_kk1qa")
 
 [node name="Nozzle" type="Marker2D" parent="." unique_id=251953139]
 position = Vector2(24, -3)

@@ -15,7 +15,7 @@ signal transition_started
 signal transition_finished
 
 # ---- Constants --------------------------------------------------------------
-const ROOM_WIDTH: int = 1152
+const ROOM_WIDTH: int = 1152 
 const ROOM_HEIGHT: int = 648
 const DOOR_SCENE_PATH = "res://scenes/rooms/Door.tscn"
 
@@ -43,6 +43,11 @@ var transition_rect: ColorRect = null # fullscreen overlay for fade
 
 var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
 var _door_scene: PackedScene = null
+
+# Door textures — set these to pass sprites to every door in the dungeon.
+# Leave null for the default ColorRect look.
+var door_locked_texture: Texture2D = null
+var door_unlocked_texture: Texture2D = null
 
 # Boss pool: array of { "scene": PackedScene, "level_min": int, "level_max": int }
 # Bosses are eligible when dungeon_level is in [level_min, level_max].
@@ -203,6 +208,9 @@ func _setup_doors(grid_pos: Vector2i):
 		var door_instance = _door_scene.instantiate()
 		door_instance.direction = dir_name
 		door_instance.room_size = Vector2(ROOM_WIDTH, ROOM_HEIGHT)
+			# Pass door textures if set
+		door_instance.locked_texture = door_locked_texture
+		door_instance.unlocked_texture = door_unlocked_texture
 		current_room_instance.add_child(door_instance)
 		_doors[dir_name] = door_instance
 		door_instance.player_entered_door.connect(_on_player_entered_door)

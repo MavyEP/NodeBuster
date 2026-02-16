@@ -1,40 +1,43 @@
-[gd_scene format=3 uid="uid://d2combatroom03"]
+[gd_scene format=3 uid="uid://br7vtfig10q0u"]
 
-[ext_resource type="Script" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Script" uid="uid://cnd2tka4o7u4n" path="res://scripts/dungeon/RoomTemplate.gd" id="1_tmpl"]
+[ext_resource type="Texture2D" uid="uid://c2u2u7afn7vb5" path="res://assets/prototypeKennyAssets/Tiles/tile_0000.png" id="2_arxv1"]
+[ext_resource type="Texture2D" uid="uid://wy7ebds0fbp8" path="res://assets/prototypeKennyAssets/Tiles/tile_0014.png" id="3_j361p"]
 
-[node name="CombatRoom3" type="Node2D"]
+[node name="CombatRoom3" type="Node2D" unique_id=1375434643]
 script = ExtResource("1_tmpl")
 difficulty = 2
-tags = PackedStringArray("combat", "hard")
+floor_texture = ExtResource("2_arxv1")
+wall_texture = ExtResource("3_j361p")
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=1186940761]
 
-[node name="Spawn1" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=1215699363]
 position = Vector2(200, 120)
 
-[node name="Spawn2" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=1834781777]
 position = Vector2(576, 120)
 
-[node name="Spawn3" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=1706914361]
 position = Vector2(950, 120)
 
-[node name="Spawn4" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=851491419]
 position = Vector2(200, 324)
 
-[node name="Spawn5" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn5" type="Marker2D" parent="SpawnPoints" unique_id=1041137213]
 position = Vector2(950, 324)
 
-[node name="Spawn6" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn6" type="Marker2D" parent="SpawnPoints" unique_id=947125642]
 position = Vector2(200, 530)
 
-[node name="Spawn7" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn7" type="Marker2D" parent="SpawnPoints" unique_id=519119372]
 position = Vector2(576, 530)
 
-[node name="Spawn8" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn8" type="Marker2D" parent="SpawnPoints" unique_id=153380276]
 position = Vector2(950, 530)
 
-[node name="Spawn9" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn9" type="Marker2D" parent="SpawnPoints" unique_id=1190244682]
 position = Vector2(400, 220)
 
-[node name="Spawn10" type="Marker2D" parent="SpawnPoints"]
+[node name="Spawn10" type="Marker2D" parent="SpawnPoints" unique_id=1920603926]
 position = Vector2(750, 430)

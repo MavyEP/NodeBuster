@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bn31jgw6qk7vx"]
 
 [ext_resource type="Script" uid="uid://r7r3wxgdvwam" path="res://scripts/abilities/Projectile.gd" id="1_ljtwl"]
-[ext_resource type="Texture2D" uid="uid://doaeg15oga1an" path="res://assets/testerSprites/yellow_body_squircle.png" id="2_66wsa"]
+[ext_resource type="Texture2D" uid="uid://41cmtbyg8i5q" path="res://assets/prototypeKennyAssets/Tiles/tile_0103.png" id="2_66wsa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ljtwl"]
 radius = 8.0
@@ -11,7 +11,8 @@ collision_mask = 3
 script = ExtResource("1_ljtwl")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038244763]
-scale = Vector2(0.2, 0.2)
+rotation = 1.5707964
+scale = Vector2(2.5, 2.5)
 texture = ExtResource("2_66wsa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1819616821]

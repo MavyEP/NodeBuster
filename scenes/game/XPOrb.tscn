@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://of40kyvfx8es"]
 
 [ext_resource type="Script" uid="uid://cpnbqlbemen5f" path="res://scripts/XPOrb.gd" id="1_guaam"]
-[ext_resource type="Texture2D" uid="uid://csotf53x53w1j" path="res://assets/testerSprites/tile_coin.png" id="2_vp1r2"]
+[ext_resource type="Texture2D" uid="uid://b1emnwdp5t6m0" path="res://assets/prototypeKennyAssets/Tiles/tile_0116.png" id="2_vp1r2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_47bd6"]
 radius = 8.0
@@ -10,6 +10,7 @@ radius = 8.0
 script = ExtResource("1_guaam")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1713991853]
+scale = Vector2(2, 2)
 texture = ExtResource("2_vp1r2")
 
 [node name="CollectionArea" type="Area2D" parent="." unique_id=1049662899]

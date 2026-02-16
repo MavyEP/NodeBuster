@@ -84,7 +84,7 @@ func spawn_xp():
 func spawn_legendary_reward():
 	# For now, just give a powerful upgrade automatically
 	# Later we can make a special legendary upgrade selection
-	print("Boss dropped legendary reward!")
+	print("Boss Drop Need to be implemented")
 	
 	# Give player a bonus level up
-	ExperienceManager.level_up.emit(ExperienceManager.current_level)
+	#ExperienceManager.level_up.emit(ExperienceManager.current_level)

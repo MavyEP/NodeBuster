@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://dffesuq8e7468"]
 
 [ext_resource type="Script" uid="uid://dsf0wp2jvr3u0" path="res://scripts/enemies/BossAI.gd" id="1_mj437"]
+[ext_resource type="Texture2D" uid="uid://dte8hhekf27tb" path="res://assets/prototypeKennyAssets/Tiles/tile_0122.png" id="2_gvfak"]
 [ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="2_jlhw3"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ykcao"]
-size = Vector2(96, 96)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6xk8f"]
 radius = 48.0
@@ -19,8 +17,9 @@ motion_mode = 1
 script = ExtResource("1_mj437")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1939084238]
-modulate = Color(0.96229225, 0, 0.49705923, 1)
-texture = SubResource("PlaceholderTexture2D_ykcao")
+rotation = -1.5707964
+scale = Vector2(6, 6)
+texture = ExtResource("2_gvfak")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1831034210]
 shape = SubResource("CircleShape2D_6xk8f")
