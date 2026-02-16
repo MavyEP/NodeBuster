@@ -1,5 +1,10 @@
 extends CharacterBody2D
 
+#Weapons
+@onready var primary_weapon: Node2D = $PrimaryWeapon
+@onready var primary_weapon_pivot: Marker2D = $PrimaryWeaponPivot
+
+
 # Components
 @onready var health_component = $HealthComponent
 @onready var stats_component = $StatsComponent
@@ -11,6 +16,7 @@ var is_invulnerable: bool = false
 @export var dash_distance: float = 140.0
 @export var dash_duration: float = 0.12
 @export var dash_cooldown: float = 0.35
+@export var gun_hold_distance: float = 1
 
 # Set this to the physics layer(s) your walls are on.
 # Example: if walls are on layer 1 -> 1 << 0
@@ -45,7 +51,8 @@ func _ready():
 func _physics_process(delta):
 	if not is_alive:
 		return
-
+	
+	
 	# Cooldowns tick
 	_dash_cooldown_left = max(0.0, _dash_cooldown_left - delta)
 
@@ -62,7 +69,16 @@ func _physics_process(delta):
 
 	# Get input direction
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-
+	
+	# PrimaryWeaponlogic for flipping sprite and rotate towards mouse 
+	var mouse_direction := primary_weapon_pivot.global_position.direction_to(get_global_mouse_position())
+	primary_weapon.global_position = primary_weapon_pivot.global_position + mouse_direction * gun_hold_distance
+	primary_weapon.scale.y = 1 if mouse_direction.x > 0 else -1
+	#Show weapon behind player
+	#primary_weapon.show_behind_parent = mouse_direction.y < 0 
+	
+	primary_weapon.look_at(get_global_mouse_position())
+	
 	# Remember last non-zero move direction (used when dashing from standstill)
 	if input_direction.length() > 0.01:
 		_last_move_dir = input_direction.normalized()

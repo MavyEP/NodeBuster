@@ -22,14 +22,10 @@ func _ready():
 
 func _process(delta):
 	# If we have a target, home in on it
-	if target and is_instance_valid(target):
-		direction = (target.global_position - global_position).normalized()
-	
+
 	# Move in direction
-	global_position += direction * speed * delta
+	position += transform.x  * speed * delta
 	
-	# Rotate to face direction
-	rotation = direction.angle()
 
 func setup(start_pos: Vector2, target_enemy: Node2D, projectile_damage: float):
 	global_position = start_pos
@@ -42,8 +38,6 @@ func setup(start_pos: Vector2, target_enemy: Node2D, projectile_damage: float):
 func _on_body_entered(body):
 	if _has_hit:
 		return
-	if not (body and body.is_in_group("enemy") and body.has_method("take_damage")):
-		return
 
 	_has_hit = true
 
@@ -53,6 +47,11 @@ func _on_body_entered(body):
 	set_deferred("monitorable", false)
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
-
-	body.take_damage(damage)
+	
+	if  (body and body.is_in_group("enemy") and body.has_method("take_damage")):
+		body.take_damage(damage)
+	elif (body and body.is_in_group("player")):
+		return
+		
+	
 	queue_free()
