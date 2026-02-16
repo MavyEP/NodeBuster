@@ -10,25 +10,46 @@ extends Node2D
 func _ready():
 	# Small delay so all autoloads are initialised
 	await get_tree().create_timer(0.3).timeout
+
+	RoomManager.door_locked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0045.png")
+	RoomManager.door_unlocked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0021.png")
 	
-	#RoomManager.door_locked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0045.png")
-	#RoomManager.door_unlocked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0021.png")
+	# ---- START HIDDEN: black screen + invisible player ----
+	player.visible = false
+	if transition_rect:
+		transition_rect.color.a = 1.0   # fully black
+
 	# Hand references to RoomManager
 	RoomManager.room_container = room_container
 	RoomManager.player = player
 	RoomManager.camera = camera
 	RoomManager.transition_rect = transition_rect
-
-	# Register player globally
 	GameManager.player = player
 
-	# Connect level advancement
 	RoomManager.trapdoor_entered.connect(_on_trapdoor_entered)
 
-	# Generate dungeon and enter the first room
+	# Connect the callback BEFORE generating
+	DungeonManager.dungeon_generated.connect(_on_dungeon_generation_complete)
+
+
+	# Generate dungeon (signal fires when done)
 	DungeonManager.generate_dungeon()
+
+func _on_dungeon_generation_complete():
+	# Dungeon graph is ready — now enter the first room
 	RoomManager.enter_room(DungeonManager.start_pos, "center")
 
+	# Show the player
+	player.visible = true
+	
+	await get_tree().create_timer(2.3).timeout
+	# Fade from black to reveal the game
+	if transition_rect:
+		var tw = create_tween()
+		tw.tween_property(transition_rect, "color:a", 0.0, 0.4)
+		await tw.finished
+		
+	transition_rect.color.a = 0.0
 	GameManager.start_game()
 
 func _on_trapdoor_entered():
@@ -42,18 +63,4 @@ func _on_trapdoor_entered():
 	# Generate a new, bigger dungeon
 	DungeonManager.generate_dungeon()
 
-	# Fade transition
-	if transition_rect:
-		var tw = create_tween()
-		tw.tween_property(transition_rect, "color:a", 1.0, 0.3)
-		await tw.finished
-
-	# Enter the new dungeon's start room
-	RoomManager.enter_room(DungeonManager.start_pos, "center")
-
-	if transition_rect:
-		var tw = create_tween()
-		tw.tween_property(transition_rect, "color:a", 0.0, 0.3)
-		await tw.finished
-
-	print("Entered dungeon level ", GameManager.dungeon_level)
+	

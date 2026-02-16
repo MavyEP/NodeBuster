@@ -208,7 +208,7 @@ func _setup_doors(grid_pos: Vector2i):
 		var door_instance = _door_scene.instantiate()
 		door_instance.direction = dir_name
 		door_instance.room_size = Vector2(ROOM_WIDTH, ROOM_HEIGHT)
-			# Pass door textures if set
+		# Pass door textures if set
 		door_instance.locked_texture = door_locked_texture
 		door_instance.unlocked_texture = door_unlocked_texture
 		current_room_instance.add_child(door_instance)
