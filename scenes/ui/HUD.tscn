@@ -24,6 +24,25 @@ border_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ll6g"]
 bg_color = Color(0, 1, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_bg"]
+bg_color = Color(0.15, 0.15, 0.15, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 0.1, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_fill"]
+bg_color = Color(0.8, 0.1, 0.1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="HUD" type="Control" unique_id=1364205081]
 layout_mode = 3
 anchors_preset = 15
@@ -110,6 +129,34 @@ custom_minimum_size = Vector2(400, 25)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_atyv1")
 theme_override_styles/fill = SubResource("StyleBoxFlat_6ll6g")
+show_percentage = false
+
+[node name="BossHealthContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 16.0
+offset_right = 250.0
+offset_bottom = 80.0
+grow_horizontal = 2
+
+[node name="BossNameLabel" type="Label" parent="BossHealthContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.85, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 20
+text = "BOSS"
+horizontal_alignment = 1
+
+[node name="BossHealthBar" type="ProgressBar" parent="BossHealthContainer"]
+custom_minimum_size = Vector2(500, 24)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_boss_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_boss_fill")
+value = 100.0
 show_percentage = false
 
 [node name="BossWarning" type="Label" parent="." unique_id=1327585494]
