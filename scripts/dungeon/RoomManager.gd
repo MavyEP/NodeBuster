@@ -7,6 +7,7 @@ extends Node
 signal room_entered(grid_pos: Vector2i)
 signal room_cleared(grid_pos: Vector2i)
 signal boss_room_cleared(grid_pos: Vector2i)
+signal boss_spawned(boss_node: CharacterBody2D)
 signal trapdoor_entered
 signal doors_locked
 signal doors_unlocked
@@ -41,12 +42,61 @@ var camera: Camera2D = null
 var transition_rect: ColorRect = null # fullscreen overlay for fade
 
 var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
-var _boss_scene = preload("res://scenes/enemies/Boss.tscn")
 var _door_scene: PackedScene = null
+
+# Boss pool: array of { "scene": PackedScene, "level_min": int, "level_max": int }
+# Bosses are eligible when dungeon_level is in [level_min, level_max].
+# level_max of -1 means no upper bound.
+# To add a new boss: append to this array or call register_boss().
+var boss_pool: Array[Dictionary] = []
+var _default_boss_scene = preload("res://scenes/enemies/Boss.tscn")
 
 # ---- Lifecycle --------------------------------------------------------------
 func _ready():
 	_door_scene = load(DOOR_SCENE_PATH)
+	_init_default_boss_pool()
+
+# ---- Boss pool management ---------------------------------------------------
+
+## Initialise the default boss pool. Override or extend this to add more bosses.
+## Each entry: { "scene": PackedScene, "level_min": int, "level_max": int }
+##   level_max = -1 means "no upper bound" (available from level_min onward).
+##
+## Example setups:
+##   Levels 1-4  → default Boss
+##   Level 5     → only a specific boss (set level_min=5, level_max=5)
+##   Levels 6-9  → a different pool
+##   Levels 10+  → yet another set
+func _init_default_boss_pool():
+	boss_pool.clear()
+	# Default boss — available at all levels as a fallback
+	boss_pool.append({
+		"scene": _default_boss_scene,
+		"level_min": 1,
+		"level_max": -1,  # no cap
+	})
+
+## Register an additional boss scene for a given level range.
+func register_boss(scene: PackedScene, level_min: int = 1, level_max: int = -1):
+	boss_pool.append({
+		"scene": scene,
+		"level_min": level_min,
+		"level_max": level_max,
+	})
+
+## Pick a random boss scene that is eligible for the current dungeon level.
+func _pick_boss_scene() -> PackedScene:
+	var level = DungeonManager.dungeon_level
+	var eligible: Array[PackedScene] = []
+	for entry in boss_pool:
+		var lmin: int = entry["level_min"]
+		var lmax: int = entry["level_max"]
+		if level >= lmin and (lmax == -1 or level <= lmax):
+			eligible.append(entry["scene"])
+	if eligible.is_empty():
+		push_warning("RoomManager: No boss in pool for level ", level, " — using default")
+		return _default_boss_scene
+	return eligible.pick_random()
 
 # ---- Public API -------------------------------------------------------------
 
@@ -207,7 +257,8 @@ func _spawn_boss(room_info: DungeonManager.RoomInfo):
 	_active_enemies.clear()
 
 	var room_center = Vector2(ROOM_WIDTH / 2.0, ROOM_HEIGHT / 2.0)
-	var boss = _boss_scene.instantiate()
+	var boss_scene = _pick_boss_scene()
+	var boss = boss_scene.instantiate()
 	boss.global_position = room_center
 
 	# Scale boss with dungeon level
@@ -226,7 +277,10 @@ func _spawn_boss(room_info: DungeonManager.RoomInfo):
 	_active_enemies.append(boss)
 	boss.tree_exiting.connect(_on_enemy_died.bind(boss))
 
-	print("RoomManager: Boss spawned for dungeon level ", level)
+	# Notify UI so the boss health bar can appear
+	boss_spawned.emit(boss)
+
+	print("RoomManager: Boss '", boss.boss_name, "' spawned for dungeon level ", level)
 
 func _spawn_trapdoor():
 	var room_center = Vector2(ROOM_WIDTH / 2.0, ROOM_HEIGHT / 2.0)

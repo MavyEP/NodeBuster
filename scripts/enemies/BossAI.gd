@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+# Boss identity — shown on the health bar
+@export var boss_name: String = "Boss"
+
 # Boss stats - stronger than regular enemies
 @export var move_speed: float = 100.0  # Slower but tankier
 @export var damage: float = 25.0  # Hits harder

@@ -14,13 +14,25 @@ extends Control
 
 @onready var room_label = $MainMargin/TopInfo/StatsRow/RoomLabel
 
+@onready var boss_health_container = $BossHealthContainer
+@onready var boss_name_label = $BossHealthContainer/BossNameLabel
+@onready var boss_health_bar = $BossHealthContainer/BossHealthBar
+
+var _current_boss: CharacterBody2D = null
+
 func _ready():
 	# Connect to player health - use deferred to ensure player is ready
 	call_deferred("connect_to_player")
 
-	# Hide boss warning initially
+	# Hide boss warning and boss health bar initially
 	if boss_warning:
 		boss_warning.hide()
+	if boss_health_container:
+		boss_health_container.hide()
+
+	# Connect to boss spawning / room clear
+	RoomManager.boss_spawned.connect(_on_boss_spawned)
+	RoomManager.boss_room_cleared.connect(_on_boss_room_cleared)
 
 	# Connect to experience system
 	ExperienceManager.experience_gained.connect(_on_xp_gained)
@@ -122,3 +134,32 @@ func connect_to_player():
 			health_comp.health_changed.connect(_on_health_changed)
 			# Manually trigger initial update
 			_on_health_changed(health_comp.current_health, health_comp.max_health)
+
+# ---- Boss health bar --------------------------------------------------------
+func _on_boss_spawned(boss: CharacterBody2D):
+	_current_boss = boss
+	if not boss_health_container:
+		return
+
+	# Set boss name
+	var display_name: String = boss.boss_name if boss.get("boss_name") else "Boss"
+	boss_name_label.text = display_name
+
+	# Connect to boss health
+	var hc = boss.get_node_or_null("HealthComponent")
+	if hc:
+		hc.health_changed.connect(_on_boss_health_changed)
+		boss_health_bar.max_value = hc.max_health
+		boss_health_bar.value = hc.current_health
+
+	boss_health_container.show()
+
+func _on_boss_health_changed(current: float, maximum: float):
+	if boss_health_bar:
+		boss_health_bar.max_value = maximum
+		boss_health_bar.value = current
+
+func _on_boss_room_cleared(_grid_pos: Vector2i):
+	_current_boss = null
+	if boss_health_container:
+		boss_health_container.hide()

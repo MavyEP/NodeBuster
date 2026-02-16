@@ -249,6 +249,55 @@ Configurable via exports on `DungeonManager`:
   - Damage: `base × (1.0 + (level - 1) × 0.3)`
   - Speed:  `base × (1.0 + (level - 1) × 0.1)`
 
+### Boss Pool (Multiple Boss Types)
+
+Bosses are selected from a **pool** based on the current dungeon level. Each
+entry has a `level_min` / `level_max` range. A boss scene is eligible when
+`dungeon_level` falls within that range (`level_max = -1` means no upper
+bound).
+
+**Default pool** (set up in `RoomManager._init_default_boss_pool()`):
+
+```gdscript
+boss_pool = [
+    { "scene": Boss.tscn, "level_min": 1, "level_max": -1 },  # fallback for all levels
+]
+```
+
+**To add more bosses**, call `RoomManager.register_boss()` at game start or
+edit `_init_default_boss_pool()`:
+
+```gdscript
+# Example: custom pool for different level ranges
+func _init_default_boss_pool():
+    boss_pool.clear()
+    # Levels 1–4: basic bosses
+    boss_pool.append({ "scene": load("res://scenes/enemies/Boss.tscn"),       "level_min": 1, "level_max": 4 })
+    boss_pool.append({ "scene": load("res://scenes/enemies/BossSlime.tscn"),  "level_min": 1, "level_max": 4 })
+    # Level 5 only: a specific mid-boss
+    boss_pool.append({ "scene": load("res://scenes/enemies/BossMid.tscn"),    "level_min": 5, "level_max": 5 })
+    # Levels 6–9: harder pool
+    boss_pool.append({ "scene": load("res://scenes/enemies/BossDemon.tscn"),  "level_min": 6, "level_max": 9 })
+    boss_pool.append({ "scene": load("res://scenes/enemies/BossKnight.tscn"), "level_min": 6, "level_max": 9 })
+    # Level 10+: end-game bosses
+    boss_pool.append({ "scene": load("res://scenes/enemies/BossFinal.tscn"),  "level_min": 10, "level_max": -1 })
+```
+
+Every boss scene must use a script that extends the same pattern as `BossAI.gd`
+(has `boss_name`, `move_speed`, `damage`, `xp_value` exports and a
+`HealthComponent` child).
+
+### Boss Health Bar (HUD)
+
+When a boss spawns, `RoomManager` emits `boss_spawned(boss_node)`. The HUD
+listens to this signal and:
+
+1. Shows a **boss health bar** (red bar, top-center of the screen).
+2. Displays the boss's `boss_name` above the bar.
+3. Connects to the boss's `HealthComponent.health_changed` signal to update
+   the bar in real time.
+4. Hides the bar when `boss_room_cleared` fires (boss defeated).
+
 ### Trapdoor
 
 After the boss is defeated in the boss room:
@@ -276,6 +325,7 @@ level 3 those same rooms have difficulty 3. The existing per-room scaling
 
 | Signal | Emitter | When |
 |--------|---------|------|
+| `RoomManager.boss_spawned(boss_node)` | RoomManager | Boss instantiated in boss room |
 | `RoomManager.boss_room_cleared(grid_pos)` | RoomManager | Boss killed in boss room |
 | `RoomManager.trapdoor_entered` | RoomManager | Player steps on trapdoor |
 | `GameManager.dungeon_level_changed(level)` | GameManager | Level counter incremented |
