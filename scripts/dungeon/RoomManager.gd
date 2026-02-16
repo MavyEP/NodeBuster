@@ -15,8 +15,8 @@ signal transition_started
 signal transition_finished
 
 # ---- Constants --------------------------------------------------------------
-const ROOM_WIDTH: int = 1152 
-const ROOM_HEIGHT: int = 648
+const ROOM_WIDTH: int = 480 
+const ROOM_HEIGHT: int = 270
 const DOOR_SCENE_PATH = "res://scenes/rooms/Door.tscn"
 
 # Player spawn offsets from room center when entering from a direction

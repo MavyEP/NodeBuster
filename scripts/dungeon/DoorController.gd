@@ -33,8 +33,8 @@ var _visual: ColorRect      # fallback when no textures
 var _sprite: Sprite2D        # used when textures are assignedt
 
 # Door dimensions
-const DOOR_WIDTH: float = 48.0
-const DOOR_DEPTH: float = 48.0
+const DOOR_WIDTH: float = 32.0
+const DOOR_DEPTH: float = 32.0
 
 func _ready():
 	_position_self()

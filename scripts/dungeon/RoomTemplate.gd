@@ -19,14 +19,14 @@ class_name RoomTemplate
 @export var tags: PackedStringArray = []
 
 ## Room interior size — keep consistent across all rooms for MVP.
-@export var room_width: int = 1152
-@export var room_height: int = 648
+@export var room_width: int = 480
+@export var room_height: int = 270
 
 ## Wall thickness used when the room builds its own collision walls.
-@export var wall_thickness: float = 48.0
+@export var wall_thickness: float = 32.0
 
 ## Door gap size (opening in the wall where doors are placed).
-@export var door_gap: float = 48.0
+@export var door_gap: float = 32.0
 
 # ---- Texture exports --------------------------------------------------------
 # Set these in the inspector to replace the placeholder ColorRects with real art.

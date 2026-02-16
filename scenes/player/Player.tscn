@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dn3cwp8rst0tf" path="res://scenes/gun/Gun.tscn" id="5_tpg5x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wr5hl"]
-radius = 32.0
+radius = 8.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1015220530]
 z_index = 5
@@ -15,7 +15,6 @@ motion_mode = 1
 script = ExtResource("1_wr5hl")
 
 [node name="Body" type="Sprite2D" parent="." unique_id=2093878742]
-scale = Vector2(2, 2)
 texture = ExtResource("2_tpg5x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=232640168]
@@ -34,6 +33,6 @@ metadata/_custom_type_script = "uid://b6iy46ngev5sq"
 [node name="PrimaryWeapon" type="Node2D" parent="." unique_id=1479394763]
 
 [node name="Gun" parent="PrimaryWeapon" unique_id=1707308515 instance=ExtResource("5_tpg5x")]
-position = Vector2(62, 0)
+position = Vector2(13, 0)
 
 [node name="PrimaryWeaponPivot" type="Marker2D" parent="." unique_id=800046864]

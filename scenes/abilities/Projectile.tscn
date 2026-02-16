@@ -12,7 +12,6 @@ script = ExtResource("1_ljtwl")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038244763]
 rotation = 1.5707964
-scale = Vector2(2.5, 2.5)
 texture = ExtResource("2_66wsa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1819616821]

@@ -1,8 +1,6 @@
 extends Control
 
 @onready var level_label = $MainMargin/TopInfo/StatsRow/LevelLabel
-@onready var time_label = $MainMargin/TopInfo/StatsRow/TimeLabel
-@onready var kill_label = $MainMargin/TopInfo/StatsRow/KillLabel
 
 @onready var health_label = $MainMargin/TopInfo/HealthContainer/HealthLabel
 @onready var health_bar = $MainMargin/TopInfo/HealthContainer/HealthBar
@@ -11,8 +9,6 @@ extends Control
 
 @onready var xp_label = $MainMargin/TopInfo/XPContainer/XPLabel
 @onready var xp_bar = $MainMargin/TopInfo/XPContainer/XPBar
-
-@onready var room_label = $MainMargin/TopInfo/StatsRow/RoomLabel
 
 @onready var boss_health_container = $BossHealthContainer
 @onready var boss_name_label = $BossHealthContainer/BossNameLabel
@@ -38,28 +34,12 @@ func _ready():
 	ExperienceManager.experience_gained.connect(_on_xp_gained)
 	ExperienceManager.level_up.connect(_on_level_up)
 
-	# Connect to room events
-	RoomManager.room_entered.connect(_on_room_entered)
-	RoomManager.doors_locked.connect(_on_doors_locked)
-	RoomManager.doors_unlocked.connect(_on_doors_unlocked)
-
 	# Initial update
 	update_xp()
 	update_level()
 
 func _process(delta):
-	update_time()
-	update_kills()
 	check_boss_warning()
-
-func update_time():
-	var time = GameManager.current_time
-	var minutes = int(time) / 60
-	var seconds = int(time) % 60
-	time_label.text = "Time: %d:%02d" % [minutes, seconds]
-
-func update_kills():
-	kill_label.text = "Kills: " + str(GameManager.enemies_killed)
 
 func update_level():
 	level_label.text = "Level: " + str(ExperienceManager.current_level)
@@ -81,25 +61,6 @@ func _on_level_up(new_level):
 	update_level()
 	update_xp()
 
-func _on_room_entered(grid_pos: Vector2i):
-	if room_label:
-		var info = DungeonManager.get_room_info(grid_pos)
-		var status = ""
-		if info and info.is_cleared:
-			status = " [CLEAR]"
-		elif info and info.is_start:
-			status = " [START]"
-		room_label.text = "Room: %d,%d%s" % [grid_pos.x, grid_pos.y, status]
-
-func _on_doors_locked():
-	if room_label:
-		room_label.modulate = Color(1.0, 0.4, 0.4)
-
-func _on_doors_unlocked():
-	if room_label:
-		room_label.modulate = Color(1.0, 1.0, 1.0)
-		# Update cleared status
-		_on_room_entered(RoomManager.current_grid_pos)
 
 func check_boss_warning():
 	# Show warning 10 seconds before boss spawn

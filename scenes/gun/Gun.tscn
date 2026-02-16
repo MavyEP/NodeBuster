@@ -8,8 +8,7 @@ script = ExtResource("1_kk1qa")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=204892951]
 rotation = 1.5707964
-scale = Vector2(2.5, 2.5)
 texture = ExtResource("2_kk1qa")
 
 [node name="Nozzle" type="Marker2D" parent="." unique_id=251953139]
-position = Vector2(24, -3)
+position = Vector2(13, 0)
