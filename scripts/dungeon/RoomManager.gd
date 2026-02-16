@@ -6,6 +6,8 @@ extends Node
 
 signal room_entered(grid_pos: Vector2i)
 signal room_cleared(grid_pos: Vector2i)
+signal boss_room_cleared(grid_pos: Vector2i)
+signal trapdoor_entered
 signal doors_locked
 signal doors_unlocked
 signal transition_started
@@ -39,6 +41,7 @@ var camera: Camera2D = null
 var transition_rect: ColorRect = null # fullscreen overlay for fade
 
 var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
+var _boss_scene = preload("res://scenes/enemies/Boss.tscn")
 var _door_scene: PackedScene = null
 
 # ---- Lifecycle --------------------------------------------------------------
@@ -94,7 +97,10 @@ func enter_room(grid_pos: Vector2i, entry_direction: String = "center"):
 	# Spawn enemies on first visit (skip start room)
 	if first_visit and not room_info.is_start:
 		_lock_doors()
-		_spawn_enemies(room_info)
+		if room_info.is_boss_room:
+			_spawn_boss(room_info)
+		else:
+			_spawn_enemies(room_info)
 	else:
 		_unlock_doors()
 
@@ -197,6 +203,42 @@ func _spawn_single_enemy(pos: Vector2, difficulty: int):
 	_active_enemies.append(enemy)
 	enemy.tree_exiting.connect(_on_enemy_died.bind(enemy))
 
+func _spawn_boss(room_info: DungeonManager.RoomInfo):
+	_active_enemies.clear()
+
+	var room_center = Vector2(ROOM_WIDTH / 2.0, ROOM_HEIGHT / 2.0)
+	var boss = _boss_scene.instantiate()
+	boss.global_position = room_center
+
+	# Scale boss with dungeon level
+	var level = DungeonManager.dungeon_level
+	var health_mult = 1.0 + (level - 1) * 0.5
+	var damage_mult = 1.0 + (level - 1) * 0.3
+	var speed_mult = 1.0 + (level - 1) * 0.1
+	boss.move_speed *= speed_mult
+	boss.damage *= damage_mult
+	if boss.has_node("HealthComponent"):
+		var hc = boss.get_node("HealthComponent")
+		hc.max_health *= health_mult
+		hc.current_health = hc.max_health
+
+	current_room_instance.add_child(boss)
+	_active_enemies.append(boss)
+	boss.tree_exiting.connect(_on_enemy_died.bind(boss))
+
+	print("RoomManager: Boss spawned for dungeon level ", level)
+
+func _spawn_trapdoor():
+	var room_center = Vector2(ROOM_WIDTH / 2.0, ROOM_HEIGHT / 2.0)
+	var trapdoor = Trapdoor.new()
+	trapdoor.position = room_center
+	current_room_instance.add_child(trapdoor)
+	trapdoor.player_entered_trapdoor.connect(_on_trapdoor_entered)
+	print("RoomManager: Trapdoor spawned at room center")
+
+func _on_trapdoor_entered():
+	trapdoor_entered.emit()
+
 func _on_enemy_died(enemy: Node):
 	_active_enemies.erase(enemy)
 	# Check if room is now clear
@@ -204,6 +246,12 @@ func _on_enemy_died(enemy: Node):
 		DungeonManager.mark_cleared(current_grid_pos)
 		_unlock_doors()
 		room_cleared.emit(current_grid_pos)
+
+		# If this was the boss room, spawn trapdoor and emit boss signal
+		var room_info = DungeonManager.get_room_info(current_grid_pos)
+		if room_info and room_info.is_boss_room:
+			_spawn_trapdoor()
+			boss_room_cleared.emit(current_grid_pos)
 
 func _get_spawn_points() -> Array[Vector2]:
 	var points: Array[Vector2] = []

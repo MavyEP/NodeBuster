@@ -7,8 +7,14 @@ extends Node
 signal dungeon_generated
 
 # --- Tunables ---------------------------------------------------------------
-@export var dungeon_size: int = 12          # total rooms (including start)
+@export var dungeon_size: int = 12          # base room count for level 1
 @export var max_generation_attempts: int = 200
+@export var size_growth_per_level: int = 3  # extra rooms added per dungeon level
+@export var boss_room_scene_path: String = "res://scenes/rooms/BossRoom.tscn"
+
+# --- Dungeon level ----------------------------------------------------------
+var dungeon_level: int = 1                  # current dungeon/floor level
+var boss_room_pos: Vector2i = Vector2i(-999, -999)  # grid pos of the boss room
 
 # --- Dungeon state ----------------------------------------------------------
 # key   = Vector2i grid position
@@ -42,6 +48,7 @@ class RoomInfo:
 	var is_visited: bool = false
 	var is_cleared: bool = false
 	var is_start: bool = false
+	var is_boss_room: bool = false
 	var difficulty: int = 0
 	var tags: Array[String] = []
 	var saved_entities: Array = []     # persisted dynamic objects (orbs, chests, items…)
@@ -53,6 +60,7 @@ func _ready():
 func reset():
 	dungeon_map.clear()
 	start_pos = Vector2i.ZERO
+	boss_room_pos = Vector2i(-999, -999)
 
 # ---- Room pool scanning -----------------------------------------------------
 func _scan_room_pool():
@@ -64,16 +72,19 @@ func _scan_room_pool():
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
-		if file_name.ends_with(".tscn") and not file_name.begins_with("StartRoom"):
+		if file_name.ends_with(".tscn") and not file_name.begins_with("StartRoom") and not file_name.begins_with("BossRoom"):
 			_room_pool.append("res://scenes/rooms/" + file_name)
 		file_name = dir.get_next()
 	dir.list_dir_end()
 	print("DungeonManager: Found ", _room_pool.size(), " room(s) in pool")
 
 # ---- Generation -------------------------------------------------------------
+func get_level_dungeon_size() -> int:
+	return dungeon_size + (dungeon_level - 1) * size_growth_per_level
+
 func generate_dungeon(size_override: int = -1):
 	reset()
-	var target_size = size_override if size_override > 0 else dungeon_size
+	var target_size = size_override if size_override > 0 else get_level_dungeon_size()
 	if _room_pool.is_empty():
 		_scan_room_pool()
 
@@ -106,8 +117,8 @@ func generate_dungeon(size_override: int = -1):
 			var room_info = RoomInfo.new()
 			room_info.scene_path = _room_pool.pick_random()
 			room_info.grid_pos = new_pos
-			# Difficulty loosely based on distance from start
-			room_info.difficulty = _manhattan_distance(Vector2i.ZERO, new_pos)
+			# Difficulty loosely based on distance from start + dungeon level
+			room_info.difficulty = _manhattan_distance(Vector2i.ZERO, new_pos) + (dungeon_level - 1)
 			dungeon_map[new_pos] = room_info
 
 			# Connect both rooms
@@ -132,9 +143,32 @@ func generate_dungeon(size_override: int = -1):
 		if not grew:
 			break  # no room can expand — stop
 
-	# 3. Rebuild frontier (optional cleanup; not strictly needed)
-	print("DungeonManager: Generated ", dungeon_map.size(), " rooms")
+	# 3. Assign boss room — pick the room farthest from start
+	_assign_boss_room()
+
+	print("DungeonManager: Level ", dungeon_level, " — Generated ", dungeon_map.size(), " rooms, boss at ", boss_room_pos)
 	dungeon_generated.emit()
+
+func _assign_boss_room():
+	var farthest_pos: Vector2i = Vector2i.ZERO
+	var max_dist: int = -1
+	for pos in dungeon_map:
+		if pos == start_pos:
+			continue
+		var dist = _manhattan_distance(start_pos, pos)
+		if dist > max_dist:
+			max_dist = dist
+			farthest_pos = pos
+
+	if farthest_pos == start_pos:
+		# Dungeon is only the start room — no boss room possible
+		return
+
+	boss_room_pos = farthest_pos
+	var boss_info = dungeon_map[farthest_pos]
+	boss_info.is_boss_room = true
+	boss_info.scene_path = boss_room_scene_path
+	boss_info.tags.append("boss")
 
 # ---- Queries ----------------------------------------------------------------
 func get_room_info(grid_pos: Vector2i) -> RoomInfo:

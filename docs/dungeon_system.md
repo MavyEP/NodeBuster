@@ -84,6 +84,7 @@ class RoomInfo:
     var is_visited: bool
     var is_cleared: bool
     var is_start: bool
+    var is_boss_room: bool       # true for the level's boss encounter room
     var difficulty: int
     var tags: Array[String]
 ```
@@ -196,12 +197,110 @@ This state is held in memory for the duration of the run.  On restart
 
 ---
 
+## Dungeon Level Progression (Binding of Isaac–style)
+
+The dungeon now supports **level-based progression**. Each level is a full
+dungeon floor with a boss room. Defeating the boss opens a trapdoor to the
+next level.
+
+### How It Works
+
+```
+Level 1  →  explore rooms  →  find boss room  →  defeat boss
+                                                     │
+          ┌──────────────────────────────────────────┘
+          ▼
+   trapdoor spawns in boss room center
+          │
+          ▼
+   player enters trapdoor
+          │
+          ▼
+Level 2  →  new dungeon generated (bigger, harder)  →  ...
+```
+
+### Dungeon Size Scaling
+
+Each level generates a larger dungeon:
+
+```
+dungeon_rooms = dungeon_size + (dungeon_level - 1) × size_growth_per_level
+```
+
+| Level | Rooms (defaults) |
+|-------|-----------------|
+| 1     | 12              |
+| 2     | 15              |
+| 3     | 18              |
+| 4     | 21              |
+| …     | +3 per level    |
+
+Configurable via exports on `DungeonManager`:
+- `dungeon_size` — base room count (default 12)
+- `size_growth_per_level` — rooms added per level (default 3)
+
+### Boss Room
+
+- Automatically placed at the **farthest room from start** (Manhattan distance).
+- Uses the `BossRoom.tscn` scene (excluded from the random room pool).
+- `RoomInfo.is_boss_room = true` so RoomManager knows to spawn a boss.
+- Boss is scaled by dungeon level:
+  - Health: `base × (1.0 + (level - 1) × 0.5)`
+  - Damage: `base × (1.0 + (level - 1) × 0.3)`
+  - Speed:  `base × (1.0 + (level - 1) × 0.1)`
+
+### Trapdoor
+
+After the boss is defeated in the boss room:
+1. Doors unlock as normal.
+2. A **Trapdoor** spawns at room center (dark square with golden border).
+3. When the player walks into the trapdoor:
+   - `GameManager.advance_dungeon_level()` increments the level counter.
+   - The current dungeon is cleaned up.
+   - A new dungeon is generated with the next level's size.
+   - The player enters the new start room.
+
+### Difficulty Scaling by Level
+
+All enemies in the dungeon get a base difficulty boost from the dungeon level:
+
+```
+room_difficulty = manhattan_distance_from_start + (dungeon_level - 1)
+```
+
+This means on level 1 the start-adjacent rooms have difficulty 1, but on
+level 3 those same rooms have difficulty 3. The existing per-room scaling
+(health ×1.25 per difficulty, speed ×1.08 per difficulty) stacks with this.
+
+### Key Signals
+
+| Signal | Emitter | When |
+|--------|---------|------|
+| `RoomManager.boss_room_cleared(grid_pos)` | RoomManager | Boss killed in boss room |
+| `RoomManager.trapdoor_entered` | RoomManager | Player steps on trapdoor |
+| `GameManager.dungeon_level_changed(level)` | GameManager | Level counter incremented |
+
+### Level Progression Flow (Game.gd)
+
+```gdscript
+func _on_trapdoor_entered():
+    GameManager.advance_dungeon_level()
+    GameManager.cleanup_game()
+    RoomManager.reset()
+    DungeonManager.generate_dungeon()
+    # fade transition...
+    RoomManager.enter_room(DungeonManager.start_pos, "center")
+```
+
+The player keeps all upgrades, XP, and stats across levels. Only the dungeon
+layout and enemies are regenerated.
+
+---
+
 ## Future Extensions
 
 The architecture is designed to grow:
 
-- **Boss rooms** — Tag a room `"boss"`, place it at the end of a branch,
-  spawn a boss instead of regular enemies.
 - **Item / treasure rooms** — Tag `"treasure"`, spawn a pickup instead of
   enemies, door is always open.
 - **Shop rooms** — Same pattern, different content.
@@ -213,6 +312,10 @@ The architecture is designed to grow:
   actual TileMap layers inside the room scene.
 - **Persistent room state** — Store enemy positions, destructible states, etc.
   in `RoomInfo` for mid-fight backtracking.
+- **Level-specific enemy types** — Introduce new enemy scenes per dungeon
+  level or difficulty tier.
+- **Inter-level shops / rest rooms** — Show a special screen between levels
+  before generating the next dungeon.
 
 ---
 
@@ -220,14 +323,16 @@ The architecture is designed to grow:
 
 ```
 scripts/dungeon/
-├── DungeonManager.gd      # Autoload — graph gen & state
-├── RoomManager.gd         # Autoload — room loading & gameplay
+├── DungeonManager.gd      # Autoload — graph gen, level tracking & state
+├── RoomManager.gd         # Autoload — room loading, boss/trapdoor handling
 ├── RoomTemplate.gd        # class_name RoomTemplate — room base script
-└── DoorController.gd      # class_name DoorController — door behaviour
+├── DoorController.gd      # class_name DoorController — door behaviour
+└── Trapdoor.gd            # class_name Trapdoor — level transition trigger
 
 scenes/rooms/
 ├── Door.tscn              # Door prefab (loaded by RoomManager)
 ├── StartRoom.tscn         # Empty starting room
+├── BossRoom.tscn          # Boss encounter room (auto-placed, not in pool)
 ├── CombatRoom1.tscn       # 5 spawn points, difficulty 1
 ├── CombatRoom2.tscn       # 7 spawn points, difficulty 1
 └── CombatRoom3.tscn       # 10 spawn points, difficulty 2
