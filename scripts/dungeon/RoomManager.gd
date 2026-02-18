@@ -159,6 +159,9 @@ func enter_room(grid_pos: Vector2i, entry_direction: String = "center"):
 			_spawn_enemies(room_info)
 	else:
 		_unlock_doors()
+		# Re-spawn trapdoor in cleared boss rooms
+		if room_info.is_boss_room and room_info.is_cleared:
+			_spawn_trapdoor()
 
 	# Restore any previously saved entities (orbs, chests, items…)
 	_restore_room_state(room_info)
