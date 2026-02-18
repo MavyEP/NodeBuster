@@ -4,13 +4,18 @@ extends CharacterBody2D
 @onready var primary_weapon: Node2D = $PrimaryWeapon
 @onready var primary_weapon_pivot: Marker2D = $PrimaryWeaponPivot
 
+@onready var body: AnimatedSprite2D = $Body
+
+
+@onready var invulnerable_timer: Timer = $InvincibilityTimer
+@export var invulnerable_time: float = 1.5
+var is_invulnerable: bool = false
 
 # Components
 @onready var health_component = $HealthComponent
 @onready var stats_component = $StatsComponent
 
 var is_alive: bool = true
-var is_invulnerable: bool = false
 
 # --- DASH SETTINGS ---
 @export var dash_distance: float = 40.0
@@ -152,8 +157,24 @@ func _get_allowed_dash_distance(dir: Vector2, desired_dist: float) -> float:
 
 func take_damage(amount: float):
 	if health_component && is_invulnerable==false:
+		start_invincibility()
 		health_component.take_damage(amount)
-
+		
+		
+		
+func start_invincibility():
+	is_invulnerable = true
+	
+	var flash_tween = create_tween()
+	flash_tween.set_loops(int(invulnerable_time / 0.1))
+	
+	flash_tween.tween_property(body, "modulate:a", 0.2, 0.05)
+	flash_tween.tween_property(body, "modulate:a", 1.0, 0.05)
+	
+	await get_tree().create_timer(invulnerable_time).timeout
+	
+	is_invulnerable = false
+	body.modulate.a = 1.0
 
 func _on_died():
 	is_alive = false
