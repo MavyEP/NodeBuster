@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bk3g1866idyqp"]
 
-[ext_resource type="Script" uid="uid://3y12hohrkf0d" path="res://scripts/interactables/TreasureChest.gd" id="1_x3bvo"]
+[ext_resource type="Script" uid="uid://3y12hohrkf0d" path="res://scripts/interactable/TreasureChest.gd" id="1_x3bvo"]
 [ext_resource type="Texture2D" uid="uid://dsiojleya2ad5" path="res://assets/prototypeKennyAssets/Tiles/tile_0089.png" id="1_yblkq"]
 [ext_resource type="Texture2D" uid="uid://dq6g04xycorja" path="res://assets/prototypeKennyAssets/Tiles/tile_0090.png" id="2_x3bvo"]
 [ext_resource type="Texture2D" uid="uid://es23jq56w841" path="res://assets/prototypeKennyAssets/Tiles/tile_0091.png" id="3_jlo0o"]

@@ -2,9 +2,45 @@
 
 [ext_resource type="Script" uid="uid://di05kl0rv1g4j" path="res://scripts/player/PlayerController.gd" id="1_wr5hl"]
 [ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="2_gfjak"]
-[ext_resource type="Texture2D" uid="uid://byuxjexkkeviy" path="res://assets/prototypeKennyAssets/Tiles/tile_0096.png" id="2_tpg5x"]
+[ext_resource type="Texture2D" uid="uid://bchakwh6oiakf" path="res://assets/prototypeKennyAssets/Animations/animation_Idle.png" id="2_tpg5x"]
 [ext_resource type="Script" uid="uid://b6iy46ngev5sq" path="res://scripts/components/StatsComponent.gd" id="3_524rm"]
 [ext_resource type="PackedScene" uid="uid://dn3cwp8rst0tf" path="res://scenes/gun/Gun.tscn" id="5_tpg5x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c3xxp"]
+atlas = ExtResource("2_tpg5x")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npwbq"]
+atlas = ExtResource("2_tpg5x")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v42im"]
+atlas = ExtResource("2_tpg5x")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pn6s4"]
+atlas = ExtResource("2_tpg5x")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7oing"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c3xxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_npwbq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v42im")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pn6s4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wr5hl"]
 radius = 8.0
@@ -15,8 +51,11 @@ collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_wr5hl")
 
-[node name="Body" type="Sprite2D" parent="." unique_id=2093878742]
-texture = ExtResource("2_tpg5x")
+[node name="Body" type="AnimatedSprite2D" parent="." unique_id=279843589]
+sprite_frames = SubResource("SpriteFrames_7oing")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.46057153
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=232640168]
 shape = SubResource("CircleShape2D_wr5hl")
