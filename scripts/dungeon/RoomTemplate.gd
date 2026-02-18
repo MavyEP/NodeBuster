@@ -114,7 +114,7 @@ func _add_rect_collision(parent: Node, pos: Vector2, size: Vector2):
 	var col = CollisionShape2D.new()
 	col.shape = shape
 	col.position = pos + size / 2.0
-	parent.add_child(col)
+	parent.call_deferred("add_child" , col)
 
 ## Draw the room floor. Uses floor_texture if set, otherwise a solid ColorRect.
 func draw_floor(color: Color = Color(-1, -1, -1)):

@@ -47,15 +47,16 @@ func _ready():
 func _position_self():
 	var w = room_size.x
 	var h = room_size.y
+	var half_wall = DOOR_DEPTH / 2.0   # 16.0
 	match direction:
 		"north":
-			position = Vector2(w / 2.0, 0)
+			position = Vector2(w / 2.0, half_wall)
 		"south":
-			position = Vector2(w / 2.0, h)
+			position = Vector2(w / 2.0, h - half_wall)
 		"east":
-			position = Vector2(w, h / 2.0)
+			position = Vector2(w - half_wall, h / 2.0)
 		"west":
-			position = Vector2(0, h / 2.0)
+			position = Vector2(half_wall, h / 2.0)
 
 # ---- Building child nodes ---------------------------------------------------
 func _build_area():
@@ -75,7 +76,7 @@ func _build_area():
 			shape.size = Vector2(DOOR_DEPTH * 2, DOOR_WIDTH)
 
 	col.shape = shape
-	_area.add_child(col)
+	_area.call_deferred("add_child", col)
 	_area.body_entered.connect(_on_body_entered)
 
 func _build_blocker():
@@ -94,7 +95,7 @@ func _build_blocker():
 			shape.size = Vector2(DOOR_DEPTH, DOOR_WIDTH)
 
 	col.shape = shape
-	_blocker.add_child(col)
+	_blocker.call_deferred("add_child", col)
 
 func _build_visual():
 	var use_sprites = locked_texture != null or unlocked_texture != null
@@ -105,17 +106,7 @@ func _build_visual():
 		_sprite.name = "DoorSprite"
 		_sprite.z_index = -4
 		
-		match direction:
-			"north":
-				_sprite.position.y += 8  # Anchor to edge, no offset
-			"east":
-				_sprite.position.x = -8
-				_sprite.rotation_degrees = 90.0
-			"west":
-				_sprite.position.x = +8
-				_sprite.rotation_degrees = -90.0
-			"south":
-				_sprite.position.y -= 8
+		
 		add_child(_sprite)
 	else:
 		# ColorRect fallback (original behavior)
@@ -150,7 +141,7 @@ func unlock():
 	is_locked = false
 	for col_child in _blocker.get_children():
 		if col_child is CollisionShape2D:
-			col_child.disabled = true
+			col_child.set_deferred("disabled", true)
 	if _sprite:
 		_sprite.texture = unlocked_texture if unlocked_texture else locked_texture
 		_play_door_tween()

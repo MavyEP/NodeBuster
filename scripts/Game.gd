@@ -14,10 +14,6 @@ func _ready():
 	RoomManager.door_locked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0045.png")
 	RoomManager.door_unlocked_texture = preload("res://assets/prototypeKennyAssets/Tiles/tile_0021.png")
 	
-	# ---- START HIDDEN: black screen + invisible player ----
-	player.visible = false
-	if transition_rect:
-		transition_rect.color.a = 1.0   # fully black
 
 	# Hand references to RoomManager
 	RoomManager.room_container = room_container
@@ -39,11 +35,6 @@ func _on_dungeon_generation_complete():
 	# Dungeon graph is ready — now enter the first room
 	RoomManager.enter_room(DungeonManager.start_pos, "center")
 
-	# Show the player
-	player.visible = true
-	# TO BE MODIFIED!!!!! REMOVE THIS TIMER 
-	await get_tree().create_timer(2.0).timeout
-	
 	
 	
 	# Fade from black to reveal the game

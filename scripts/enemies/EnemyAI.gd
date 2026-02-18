@@ -14,6 +14,10 @@ extends CharacterBody2D
 var player = null
 var is_alive: bool = true
 
+var _target_in_hitbox: Node2D = null
+var _damage_tick_timer: float = 0.0
+const DAMAGE_TICK_INTERVAL: float = 0.5  
+
 func _ready():
 	
 	add_to_group("enemy")
@@ -24,7 +28,7 @@ func _ready():
 	# Connect hitbox for collisions with player
 	if hitbox:
 		hitbox.body_entered.connect(_on_hitbox_body_entered)
-	
+		hitbox.body_exited.connect(_on_hitbox_body_exited)
 	# Find player
 	player = GameManager.player
 
@@ -39,14 +43,28 @@ func _physics_process(delta):
 	
 	# Move
 	move_and_slide()
+	
+	 # Contact damage tick
+	if _target_in_hitbox and is_instance_valid(_target_in_hitbox):
+		_damage_tick_timer -= delta
+		if _damage_tick_timer <= 0.0:
+			_target_in_hitbox.take_damage(damage)
+			_damage_tick_timer = DAMAGE_TICK_INTERVAL
 
 func take_damage(amount: float):
 	if health_component:
 		health_component.take_damage(amount)
 
 func _on_hitbox_body_entered(body):
-	# If we hit the player, damage them
-	body.take_damage(damage)
+	if body.is_in_group("player") and body.has_method("take_damage"):
+		body.take_damage(damage)
+		_target_in_hitbox = body
+		_damage_tick_timer = DAMAGE_TICK_INTERVAL  # reset timer so next tick waits the full interval
+
+func _on_hitbox_body_exited(body):
+	if body == _target_in_hitbox:
+		_target_in_hitbox = null
+
 
 func _on_died():
 	is_alive = false
