@@ -1,20 +1,18 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b8kmmwv6lxfqt"]
 
-[ext_resource type="Script" path="res://scripts/enemies/EnemyProjectile.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://41cmtbyg8i5q" path="res://assets/prototypeKennyAssets/Tiles/tile_0103.png" id="2_sprite"]
+[ext_resource type="Script" uid="uid://jsw4w1l2nxup" path="res://scripts/enemies/EnemyProjectile.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ir3pgci8o5bk" path="res://assets/prototypeKennyAssets/Tiles/tile_0102.png" id="2_cmmky"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_proj"]
 radius = 6.0
 
-[node name="EnemyProjectile" type="Area2D"]
+[node name="EnemyProjectile" type="Area2D" unique_id=936404476]
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("1_script")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=883989583]
 rotation = 1.5707964
-modulate = Color(1, 0.3, 0.3, 1)
-texture = ExtResource("2_sprite")
+texture = ExtResource("2_cmmky")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=207474363]
 shape = SubResource("CircleShape2D_proj")

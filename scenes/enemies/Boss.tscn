@@ -5,14 +5,13 @@
 [ext_resource type="Script" uid="uid://bwsiwuj7heiqm" path="res://scripts/components/HealthComponent.gd" id="2_jlhw3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6xk8f"]
-radius = 48.0
+radius = 28.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8e3ao"]
-radius = 48.0
+radius = 40.0
 
 [node name="Boss" type="CharacterBody2D" unique_id=661374534]
 collision_layer = 2
-collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_mj437")
 move_speed = 50.0

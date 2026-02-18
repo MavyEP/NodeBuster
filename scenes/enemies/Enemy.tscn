@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cya1jrnsmylrn" path="res://assets/prototypeKennyAssets/Tiles/tile_0123.png" id="2_8axbs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6xk8f"]
-radius = 24.0
+radius = 8.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8e3ao"]
 radius = 24.0
@@ -13,7 +13,6 @@ radius = 24.0
 [node name="Enemy" type="CharacterBody2D" unique_id=661374534]
 z_index = 5
 collision_layer = 2
-collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_8e3ao")
 move_speed = 50.0
