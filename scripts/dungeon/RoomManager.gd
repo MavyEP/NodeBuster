@@ -42,6 +42,7 @@ var camera: Camera2D = null
 var transition_rect: ColorRect = null # fullscreen overlay for fade
 
 var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
+var _ranged_enemy_scene = preload("res://scenes/enemies/RangedEnemy.tscn")
 var _door_scene: PackedScene = null
 
 # Door textures — set these to pass sprites to every door in the dungeon.
@@ -245,7 +246,12 @@ func _spawn_enemies(room_info: DungeonManager.RoomInfo):
 		_spawn_single_enemy(pos, room_info.difficulty)
 
 func _spawn_single_enemy(pos: Vector2, difficulty: int):
-	var enemy = _enemy_scene.instantiate()
+	# Higher difficulty = more chance of ranged enemies (0% at diff 0, capped at 50%)
+	var scene = _enemy_scene
+	if randf() < clampf(difficulty * 0.15, 0.0, 0.5):
+		scene = _ranged_enemy_scene
+
+	var enemy = scene.instantiate()
 	enemy.global_position = pos
 
 	# Scale with difficulty
