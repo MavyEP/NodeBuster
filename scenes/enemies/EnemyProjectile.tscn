@@ -9,7 +9,7 @@ radius = 6.0
 [node name="EnemyProjectile" type="Area2D" unique_id=936404476]
 collision_layer = 0
 script = ExtResource("1_script")
-speed = 150.0
+speed = 100.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=883989583]
 rotation = 1.5707964

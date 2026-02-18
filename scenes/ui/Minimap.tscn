@@ -1,8 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://02a1yraaan70"]
 
-[ext_resource type="Script" path="res://scripts/ui/Minimap.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bwxfwe5no6rin" path="res://scripts/ui/Minimap.gd" id="1_script"]
 
-[node name="Minimap" type="Control"]
+[node name="Minimap" type="Control" unique_id=1471376803]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

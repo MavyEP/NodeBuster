@@ -14,5 +14,6 @@ texture = ExtResource("2_kk1qa")
 position = Vector2(6, 0)
 
 [node name="Weapon_Cooldown" type="Timer" parent="." unique_id=1483850548]
+wait_time = 0.7
 
 [connection signal="timeout" from="Weapon_Cooldown" to="." method="_on_weapon_cooldown_timeout"]

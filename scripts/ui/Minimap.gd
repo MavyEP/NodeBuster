@@ -12,12 +12,12 @@ const MARGIN := 6.0
 
 # ---- Colours ---------------------------------------------------------------
 const COLOR_CURRENT := Color(1.0, 1.0, 1.0, 1.0)
-const COLOR_VISITED := Color(0.5, 0.5, 0.55, 0.9)
-const COLOR_CLEARED := Color(0.38, 0.38, 0.42, 0.85)
+const COLOR_VISITED := Color(0.0, 0.0, 0.0, 1)
+const COLOR_CLEARED := Color(0.0, 0.0, 0.0, 1)
 const COLOR_BOSS := Color(0.85, 0.15, 0.15, 1.0)
 const COLOR_START := Color(0.2, 0.7, 0.3, 1.0)
-const COLOR_UNKNOWN := Color(0.35, 0.35, 0.4, 0.5)
-const COLOR_CONN := Color(0.4, 0.4, 0.45, 0.7)
+const COLOR_UNKNOWN := Color(0.0, 0.0, 0.0, 1)
+const COLOR_CONN := Color(0.0, 0.0, 0.0, 1)
 const COLOR_BG := Color(0.0, 0.0, 0.0, 0.35)
 
 func _ready():
