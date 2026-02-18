@@ -16,22 +16,24 @@ var player = null
 func _ready():
 	print("GameManager initialized")
 
-func start_game():
+func start_game(int):
 	# Clean up any leftover entities
 	cleanup_game()
-
 	is_game_running = true
-	current_time = 0.0
-	enemies_killed = 0
-	dungeon_level = 1
-	DungeonManager.dungeon_level = 1
+	if int == 1:
+			
+	
+		current_time = 0.0
+		enemies_killed = 0
+		dungeon_level = 1
+		DungeonManager.dungeon_level = 1
 
-	# Reset systems
-	ExperienceManager.reset()
-	BossManager.reset()
-	UpgradeManager.reset()
-	#DungeonManager.reset()
-	#RoomManager.reset()
+		# Reset systems
+		ExperienceManager.reset()
+		BossManager.reset()
+		UpgradeManager.reset()
+		#DungeonManager.reset()
+		#RoomManager.reset()
 
 	# Unpause
 	get_tree().paused = false

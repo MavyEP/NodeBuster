@@ -105,6 +105,8 @@ collision_layer = 2
 collision_mask = 17
 motion_mode = 1
 script = ExtResource("2_script")
+fire_rate = 2.0
+projectile_speed = 120.0
 move_speed = 40.0
 damage = 8.0
 

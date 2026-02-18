@@ -13,6 +13,8 @@ func _ready():
 	if transition_rect:
 		transition_rect.color.a = 1.0
 	player.visible = false
+	var health = player.get_node("HealthComponent")
+	print(health.max_health)
 	
 	# Small delay so all autoloads are initialised
 	await get_tree().create_timer(0.3).timeout
@@ -51,7 +53,7 @@ func _on_dungeon_generation_complete():
 		await tw.finished
 		
 	transition_rect.color.a = 0.0
-	GameManager.start_game()
+	GameManager.start_game(DungeonManager.dungeon_level)
 
 func _on_trapdoor_entered():
 	

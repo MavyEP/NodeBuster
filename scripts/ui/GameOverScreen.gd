@@ -23,6 +23,6 @@ func _on_restart_pressed():
 	
 	# Hide this screen
 	hide()
-	
+	DungeonManager.dungeon_level = 1
 	# Reload the entire game scene
 	get_tree().reload_current_scene()
