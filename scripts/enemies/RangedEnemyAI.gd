@@ -8,17 +8,29 @@ extends BaseEnemy
 @export var projectile_speed: float = 300.0
 @export var projectile_damage: float = 8.0
 
+# Contact damage tick
+var _target_in_hitbox: Node2D = null
+var _damage_tick_timer: float = 0.0
+const DAMAGE_TICK_INTERVAL: float = 0.5
+
 var _fire_timer: float = 0.0
 var _enemy_projectile_scene = preload("res://scenes/enemies/EnemyProjectile.tscn")
 
 func _physics_process(delta):
 	if not is_alive or not player or not player.is_alive:
 		return
-
+	
 	var to_player = player.global_position - global_position
 	var dist = to_player.length()
 	var dir = to_player.normalized()
-
+	
+	# Tick contact damage while overlapping
+	if _target_in_hitbox and is_instance_valid(_target_in_hitbox):
+		_damage_tick_timer -= delta
+		if _damage_tick_timer <= 0.0:
+			_target_in_hitbox.take_damage(damage)
+			_damage_tick_timer = DAMAGE_TICK_INTERVAL
+			
 	# Keep distance — approach if too far, back off if too close
 	if dist > preferred_range + 20.0:
 		velocity = dir * move_speed
@@ -55,3 +67,15 @@ func _shoot(dir: Vector2):
 	var room = RoomManager.current_room_instance
 	if room and is_instance_valid(room):
 		room.add_child(proj)
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player") and body.has_method("take_damage"):
+		body.take_damage(damage)
+		_target_in_hitbox = body
+		_damage_tick_timer = DAMAGE_TICK_INTERVAL
+
+
+func _on_area_2d_body_exited(body: Node2D) -> void:
+	if body == _target_in_hitbox:
+		_target_in_hitbox = null

@@ -7,7 +7,6 @@ extends CharacterBody2D
 @onready var body: AnimatedSprite2D = $Body
 
 
-@onready var invulnerable_timer: Timer = $InvincibilityTimer
 @export var invulnerable_time: float = 1.5
 var is_invulnerable: bool = false
 

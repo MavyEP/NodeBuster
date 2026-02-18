@@ -134,7 +134,9 @@ radius = 40.0
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_mj437")
+boss_name = "Spider"
 move_speed = 50.0
+xp_value = 20
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=1974234353]
 rotation = -1.5707964

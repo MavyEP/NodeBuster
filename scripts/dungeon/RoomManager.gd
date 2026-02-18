@@ -42,8 +42,8 @@ var camera: Camera2D = null
 var transition_rect: ColorRect = null # fullscreen overlay for fade
 
 #var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
-var _enemy_scene =  preload("res://scenes/enemies/RangedEnemy.tscn")
-var _ranged_enemy_scene = preload("res://scenes/enemies/RangedEnemy.tscn")
+var _enemy_scene =  preload("res://scenes/enemies/Enemy.tscn")
+var _ranged_enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
 var _door_scene: PackedScene = null
 
 # Door textures — set these to pass sprites to every door in the dungeon.
