@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bk3g1866idyqp"]
+
+[ext_resource type="Script" uid="uid://3y12hohrkf0d" path="res://scripts/interactables/TreasureChest.gd" id="1_x3bvo"]
+[ext_resource type="Texture2D" uid="uid://dsiojleya2ad5" path="res://assets/prototypeKennyAssets/Tiles/tile_0089.png" id="1_yblkq"]
+[ext_resource type="Texture2D" uid="uid://dq6g04xycorja" path="res://assets/prototypeKennyAssets/Tiles/tile_0090.png" id="2_x3bvo"]
+[ext_resource type="Texture2D" uid="uid://es23jq56w841" path="res://assets/prototypeKennyAssets/Tiles/tile_0091.png" id="3_jlo0o"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d8lam"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_yblkq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_x3bvo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_jlo0o")
+}],
+"loop": false,
+"name": &"openChest",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2jyvl"]
+radius = 12.0
+
+[node name="TreasureChest" type="Node2D" unique_id=1473830453]
+script = ExtResource("1_x3bvo")
+
+[node name="Chest" type="AnimatedSprite2D" parent="." unique_id=1195339802]
+sprite_frames = SubResource("SpriteFrames_d8lam")
+animation = &"openChest"
+frame = 2
+frame_progress = 1.0
+
+[node name="AreaOfEffect" type="Area2D" parent="." unique_id=119916443]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaOfEffect" unique_id=1742141970]
+shape = SubResource("CircleShape2D_2jyvl")
+
+[connection signal="body_entered" from="AreaOfEffect" to="." method="_on_area_of_effect_body_entered"]
