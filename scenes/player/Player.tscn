@@ -27,6 +27,7 @@ metadata/_custom_type_script = "uid://bwsiwuj7heiqm"
 
 [node name="StatsComponent" type="Node" parent="." unique_id=1998021337]
 script = ExtResource("3_524rm")
+move_speed = 100.0
 pickup_radius = 40.0
 metadata/_custom_type_script = "uid://b6iy46ngev5sq"
 

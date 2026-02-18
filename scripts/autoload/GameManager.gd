@@ -71,6 +71,11 @@ func cleanup_game():
 		if is_instance_valid(projectile):
 			projectile.queue_free()
 
+	# Remove all enemy projectiles
+	for proj in get_tree().get_nodes_in_group("enemy_projectile"):
+		if is_instance_valid(proj):
+			proj.queue_free()
+
 	# Remove all XP orbs
 	var orbs = get_tree().get_nodes_in_group("xp_orb")
 	for orb in orbs:
