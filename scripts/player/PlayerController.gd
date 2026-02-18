@@ -13,7 +13,7 @@ var is_alive: bool = true
 var is_invulnerable: bool = false
 
 # --- DASH SETTINGS ---
-@export var dash_distance: float = 140.0
+@export var dash_distance: float = 40.0
 @export var dash_duration: float = 0.12
 @export var dash_cooldown: float = 0.35
 @export var gun_hold_distance: float = 1
