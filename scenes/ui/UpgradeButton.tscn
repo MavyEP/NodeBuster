@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bukn63aftsu6q" path="res://scripts/ui/UpgradeButton.gd" id="1_mvdy7"]
 
 [node name="UpgradeButton" type="Button" unique_id=310739154]
-custom_minimum_size = Vector2(200, 150)
+custom_minimum_size = Vector2(80, 100)
 offset_right = 8.0
 offset_bottom = 8.0
 script = ExtResource("1_mvdy7")
@@ -19,18 +19,18 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="IconColor" type="ColorRect" parent="Content" unique_id=1952020874]
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="NameLabel" type="Label" parent="Content" unique_id=1609412988]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 10
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="DescriptionLabel" type="Label" parent="Content" unique_id=594876830]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 8
 horizontal_alignment = 1
 autowrap_mode = 3

@@ -16,6 +16,7 @@ collision_layer = 2
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_8e3ao")
+move_speed = 50.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1939084238]
 texture = ExtResource("2_8axbs")
@@ -30,6 +31,7 @@ metadata/_custom_type_script = "uid://bwsiwuj7heiqm"
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=286789916]
 collision_layer = 8
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1914011355]
 shape = SubResource("CircleShape2D_8e3ao")

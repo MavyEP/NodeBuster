@@ -77,7 +77,7 @@ func spawn_xp():
 
 	var room = RoomManager.current_room_instance
 	if room and is_instance_valid(room):
-		room.add_child(xp_orb)
+		room.call_deferred("add_child", xp_orb)
 	else:
 		get_tree().root.add_child(xp_orb)
 

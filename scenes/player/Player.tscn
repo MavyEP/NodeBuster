@@ -10,7 +10,8 @@
 radius = 8.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1015220530]
-z_index = 5
+z_index = 15
+collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_wr5hl")
 
@@ -26,6 +27,7 @@ metadata/_custom_type_script = "uid://bwsiwuj7heiqm"
 
 [node name="StatsComponent" type="Node" parent="." unique_id=1998021337]
 script = ExtResource("3_524rm")
+pickup_radius = 40.0
 metadata/_custom_type_script = "uid://b6iy46ngev5sq"
 
 [node name="AbilityContainer" type="Node" parent="." unique_id=793653026]

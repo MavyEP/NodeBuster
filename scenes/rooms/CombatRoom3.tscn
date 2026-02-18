@@ -13,31 +13,31 @@ wall_texture = ExtResource("3_j361p")
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=1186940761]
 
 [node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=1215699363]
-position = Vector2(200, 120)
+position = Vector2(71, 50)
 
 [node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=1834781777]
-position = Vector2(576, 120)
+position = Vector2(230, 46)
 
 [node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=1706914361]
-position = Vector2(950, 120)
+position = Vector2(360, 41)
 
 [node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=851491419]
-position = Vector2(200, 324)
+position = Vector2(75, 209)
 
 [node name="Spawn5" type="Marker2D" parent="SpawnPoints" unique_id=1041137213]
-position = Vector2(950, 324)
+position = Vector2(394, 128)
 
 [node name="Spawn6" type="Marker2D" parent="SpawnPoints" unique_id=947125642]
-position = Vector2(200, 530)
+position = Vector2(174, 221)
 
 [node name="Spawn7" type="Marker2D" parent="SpawnPoints" unique_id=519119372]
-position = Vector2(576, 530)
+position = Vector2(327, 209)
 
 [node name="Spawn8" type="Marker2D" parent="SpawnPoints" unique_id=153380276]
-position = Vector2(950, 530)
+position = Vector2(416, 205)
 
 [node name="Spawn9" type="Marker2D" parent="SpawnPoints" unique_id=1190244682]
-position = Vector2(400, 220)
+position = Vector2(150, 115)
 
 [node name="Spawn10" type="Marker2D" parent="SpawnPoints" unique_id=1920603926]
-position = Vector2(750, 430)
+position = Vector2(282, 137)

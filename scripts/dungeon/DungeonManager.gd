@@ -72,7 +72,7 @@ func _scan_room_pool():
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
-		if file_name.ends_with(".tscn") and not file_name.begins_with("StartRoom") and not file_name.begins_with("BossRoom"):
+		if file_name.ends_with(".tscn") and not file_name.begins_with("StartRoom") and not file_name.begins_with("BossRoom") and not file_name.begins_with("Door"):
 			_room_pool.append("res://scenes/rooms/" + file_name)
 		file_name = dir.get_next()
 	dir.list_dir_end()

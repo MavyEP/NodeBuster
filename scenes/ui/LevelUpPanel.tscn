@@ -31,11 +31,10 @@ grow_vertical = 2
 
 [node name="UpgradeContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1493400242]
 layout_mode = 2
-theme_override_constants/separation = 20
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/UpgradeContainer" unique_id=1359768194]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 24
 text = "\"LEVEL UP!\""
 horizontal_alignment = 1
 

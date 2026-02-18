@@ -10,7 +10,6 @@ radius = 8.0
 script = ExtResource("1_guaam")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1713991853]
-scale = Vector2(2, 2)
 texture = ExtResource("2_vp1r2")
 
 [node name="CollectionArea" type="Area2D" parent="." unique_id=1049662899]

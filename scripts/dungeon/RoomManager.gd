@@ -21,11 +21,11 @@ const DOOR_SCENE_PATH = "res://scenes/rooms/Door.tscn"
 
 # Player spawn offsets from room center when entering from a direction
 const ENTRY_OFFSETS = {
-	"north": Vector2(0, -240),   # came from south of previous room → top area
-	"south": Vector2(0,  240),   # came from north of previous room → bottom
-	"east":  Vector2( 480, 0),   # came from west  → right area
-	"west":  Vector2(-480, 0),   # came from east  → left area
-	"center": Vector2.ZERO,      # start room / default
+	"north": Vector2(0, -87),    # spawn just below north wall
+	"south": Vector2(0,  87),    # spawn just above south wall
+	"east":  Vector2( 192, 0),   # spawn just left of east wall
+	"west":  Vector2(-192, 0),   # spawn just right of west wall
+	"center": Vector2.ZERO,
 }
 
 # ---- State ------------------------------------------------------------------
@@ -294,7 +294,7 @@ func _spawn_trapdoor():
 	var room_center = Vector2(ROOM_WIDTH / 2.0, ROOM_HEIGHT / 2.0)
 	var trapdoor = Trapdoor.new()
 	trapdoor.position = room_center
-	current_room_instance.add_child(trapdoor)
+	current_room_instance.call_deferred("add_child", trapdoor)
 	trapdoor.player_entered_trapdoor.connect(_on_trapdoor_entered)
 	print("RoomManager: Trapdoor spawned at room center")
 

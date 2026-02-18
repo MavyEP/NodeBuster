@@ -13,22 +13,22 @@ wall_texture = ExtResource("3_s8klb")
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=435987204]
 
 [node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=1245571999]
-position = Vector2(200, 150)
+position = Vector2(81, 59)
 
 [node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=1057219152]
-position = Vector2(950, 150)
+position = Vector2(412, 55)
 
 [node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=759227183]
-position = Vector2(576, 324)
+position = Vector2(237, 128)
 
 [node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=1442181967]
-position = Vector2(200, 500)
+position = Vector2(98, 214)
 
 [node name="Spawn5" type="Marker2D" parent="SpawnPoints" unique_id=6214218]
-position = Vector2(950, 500)
+position = Vector2(383, 225)
 
 [node name="Spawn6" type="Marker2D" parent="SpawnPoints" unique_id=90204408]
-position = Vector2(400, 324)
+position = Vector2(145, 129)
 
 [node name="Spawn7" type="Marker2D" parent="SpawnPoints" unique_id=598724669]
-position = Vector2(750, 324)
+position = Vector2(343, 132)

@@ -12,4 +12,4 @@ wall_texture = ExtResource("3_6diqo")
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=1828362292]
 
 [node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=258852500]
-position = Vector2(576, 324)
+position = Vector2(236, 120)
