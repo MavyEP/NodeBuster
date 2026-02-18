@@ -13,10 +13,9 @@ script = ExtResource("1_m44fu")
 [node name="RoomContainer" type="Node2D" parent="." unique_id=417268744]
 
 [node name="Player" parent="." unique_id=74255515 instance=ExtResource("1_klkup")]
-position = Vector2(576, 324)
 
 [node name="RoomCamera" type="Camera2D" parent="." unique_id=2059447391]
-position = Vector2(576, 324)
+position = Vector2(240, 140)
 position_smoothing_enabled = true
 
 [node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=1177798606]
@@ -38,14 +37,13 @@ size_flags_vertical = 4
 
 [node name="LevelUpPanel" parent="CanvasLayer" unique_id=1863343534 instance=ExtResource("3_vrspl")]
 z_index = 4096
-texture_filter = 2
 offset_top = -1.0
 offset_bottom = -1.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Minimap" parent="CanvasLayer" instance=ExtResource("6_minimap")]
+[node name="Minimap" parent="CanvasLayer" unique_id=723662441 instance=ExtResource("6_minimap")]
+layout_mode = 3
 
 [node name="GameOverScreen" parent="CanvasLayer" unique_id=206738302 instance=ExtResource("5_lyhax")]
 process_mode = 3
-texture_filter = 2

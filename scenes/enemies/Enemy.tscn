@@ -133,6 +133,7 @@ radius = 24.0
 [node name="Enemy" type="CharacterBody2D" unique_id=661374534]
 z_index = 5
 collision_layer = 2
+collision_mask = 17
 motion_mode = 1
 script = ExtResource("1_8e3ao")
 move_speed = 50.0

@@ -5,8 +5,6 @@ extends Control
 @onready var health_label = $MainMargin/TopInfo/HealthContainer/HealthLabel
 @onready var health_bar = $MainMargin/TopInfo/HealthContainer/HealthBar
 
-@onready var boss_warning = $BossWarning
-
 @onready var xp_label = $MainMargin/TopInfo/XPContainer/XPLabel
 @onready var xp_bar = $MainMargin/TopInfo/XPContainer/XPBar
 
@@ -20,9 +18,7 @@ func _ready():
 	# Connect to player health - use deferred to ensure player is ready
 	call_deferred("connect_to_player")
 
-	# Hide boss warning and boss health bar initially
-	if boss_warning:
-		boss_warning.hide()
+
 	if boss_health_container:
 		boss_health_container.hide()
 
@@ -38,8 +34,7 @@ func _ready():
 	update_xp()
 	update_level()
 
-func _process(delta):
-	check_boss_warning()
+
 
 func update_level():
 	level_label.text = "Level: " + str(ExperienceManager.current_level)
@@ -62,31 +57,6 @@ func _on_level_up(new_level):
 	update_xp()
 
 
-func check_boss_warning():
-	# Show warning 10 seconds before boss spawn
-	var time_to_next_boss = BossManager.next_boss_time - GameManager.current_time
-
-	if time_to_next_boss <= 10.0 and time_to_next_boss > 9.0:
-		# Only show once (when it crosses 10 seconds)
-		if boss_warning and not boss_warning.visible:
-			show_boss_warning()
-
-
-func show_boss_warning():
-	if not boss_warning:
-		return
-
-	boss_warning.show()
-
-	# Flash the warning
-	var tween = create_tween()
-	tween.set_loops(6)
-	tween.tween_property(boss_warning, "modulate:a", 0.0, 0.25)
-	tween.tween_property(boss_warning, "modulate:a", 1.0, 0.25)
-
-	# Hide after 3 seconds
-	await get_tree().create_timer(3.0).timeout
-	boss_warning.hide()
 
 func connect_to_player():
 	if GameManager.player:

@@ -8,6 +8,12 @@ extends Node2D
 @onready var transition_rect: ColorRect = $TransitionLayer/TransitionRect
 
 func _ready():
+	
+	# Start fully black and hide the player immediately
+	if transition_rect:
+		transition_rect.color.a = 1.0
+	player.visible = false
+	
 	# Small delay so all autoloads are initialised
 	await get_tree().create_timer(0.3).timeout
 
@@ -35,7 +41,8 @@ func _on_dungeon_generation_complete():
 	# Dungeon graph is ready — now enter the first room
 	RoomManager.enter_room(DungeonManager.start_pos, "center")
 
-	
+	# Everything is placed — reveal
+	player.visible = true
 	
 	# Fade from black to reveal the game
 	if transition_rect:
@@ -47,6 +54,13 @@ func _on_dungeon_generation_complete():
 	GameManager.start_game()
 
 func _on_trapdoor_entered():
+	
+		# Fade to black before building the next floor
+	if transition_rect:
+		var tw = create_tween()
+		tw.tween_property(transition_rect, "color:a", 1.0, 0.3)
+		await tw.finished
+		
 	# Advance to next dungeon level
 	GameManager.advance_dungeon_level()
 

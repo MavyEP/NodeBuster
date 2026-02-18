@@ -41,7 +41,8 @@ var player: CharacterBody2D = null
 var camera: Camera2D = null
 var transition_rect: ColorRect = null # fullscreen overlay for fade
 
-var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
+#var _enemy_scene = preload("res://scenes/enemies/Enemy.tscn")
+var _enemy_scene =  preload("res://scenes/enemies/RangedEnemy.tscn")
 var _ranged_enemy_scene = preload("res://scenes/enemies/RangedEnemy.tscn")
 var _door_scene: PackedScene = null
 

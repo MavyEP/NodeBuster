@@ -35,6 +35,10 @@ window/size/window_height_override=540
 window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
+[gui]
+
+theme/custom="uid://s2pg56md1tln"
+
 [input]
 
 move_up={
@@ -74,7 +78,7 @@ fire={
 2d_physics/layer_2="Enemy"
 2d_physics/layer_3="PlayerHitbox"
 2d_physics/layer_4="EnemyHitbox"
-2d_physics/layer_5="Walls/Doors"
+2d_physics/layer_5="Obstacles"
 
 [physics]
 

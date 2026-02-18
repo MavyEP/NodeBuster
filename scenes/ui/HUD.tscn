@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cswoto822dl8e"]
 
 [ext_resource type="Script" uid="uid://noa6u1lb63mv" path="res://scripts/ui/HUD.gd" id="1_kw0id"]
+[ext_resource type="FontFile" uid="uid://b6xp5uykcirhw" path="res://assets/fonts/ARCADECLASSIC.TTF" id="2_atyv1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hc4fa"]
 bg_color = Color(0.23921569, 0.23921569, 0.23921569, 1)
@@ -44,7 +45,6 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [node name="HUD" type="Control" unique_id=1364205081]
-texture_filter = 2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,6 +75,7 @@ layout_mode = 2
 
 [node name="LevelLabel" type="Label" parent="MainMargin/TopInfo/StatsRow" unique_id=2134339490]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_atyv1")
 theme_override_font_sizes/font_size = 14
 text = "Level: 1"
 
@@ -137,24 +138,3 @@ theme_override_styles/background = SubResource("StyleBoxFlat_boss_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_boss_fill")
 value = 100.0
 show_percentage = false
-
-[node name="BossWarning" type="Label" parent="." unique_id=1327585494]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 20
-text = "⚠️ BOSS INCOMING! ⚠️"
-horizontal_alignment = 1
-vertical_alignment = 1
